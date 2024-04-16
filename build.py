@@ -35,6 +35,11 @@ DEPS_FOLDER = "_deps"
 
 
 def clear_dir(dir_path):
+    """
+
+    :param dir_path: 
+
+    """
     if os.path.exists(dir_path):
         shutil.rmtree(dir_path, ignore_errors=True)
     path = Path(dir_path)
@@ -44,17 +49,31 @@ def clear_dir(dir_path):
 
 
 def copy_files(src_dir, dst_dir, match_exp):
+    """
+
+    :param src_dir: 
+    :param dst_dir: 
+    :param match_exp: 
+
+    """
     clear_dir(dst_dir)
     for filename in glob.glob(os.path.join(src_dir, match_exp)):
         shutil.copy(filename, dst_dir)
 
 
 def remove_files(src_dir, match_exp):
+    """
+
+    :param src_dir: 
+    :param match_exp: 
+
+    """
     for filename in glob.glob(os.path.join(src_dir, match_exp)):
         os.remove(filename)
 
 
 def init_vsvars():
+    """ """
     vswhere_path = r"%ProgramFiles(x86)%/Microsoft Visual Studio/Installer/vswhere.exe"
     vswhere_path = os.path.expandvars(vswhere_path)
     if not os.path.exists(vswhere_path):
