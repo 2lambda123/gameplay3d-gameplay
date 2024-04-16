@@ -79,7 +79,7 @@ else:
 compiler_dir = os.path.join(current_dir, COMPILER_FOLDER)
 if not args.build and not args.clean:
     deps_dir = os.path.join(current_dir, DEPS_FOLDER)
-    premake_proc = subprocess.Popen(f"{deps_dir}/premake/premake5 --file=premake5.lua {toolchain}", cwd=current_dir, shell=True)
+    premake_proc = subprocess.Popen(f"{deps_dir}/premake/premake5 --file=premake5.lua {toolchain}", cwd=current_dir, shell=False)
     premake_proc.wait()
 
 # clean build check
@@ -119,23 +119,23 @@ if not args.generate:
         compiler_dir = os.path.join(compiler_dir, "gmake")
         os.chdir(compiler_dir)
         if clean_build:
-            subprocess.run("make clean", shell=True)
+            subprocess.run("make clean", shell=False)
             clear_dir(build_dir)
         else:
             if config_debug:
-                subprocess.run("make config=debug_x86_64", shell=True)
+                subprocess.run("make config=debug_x86_64", shell=False)
             if config_release:
-                subprocess.run("make config=release_x86_64", shell=True)
+                subprocess.run("make config=release_x86_64", shell=False)
     elif toolchain == "xcode4":
         compiler_dir = os.path.join(compiler_dir, "xcode4")
         os.chdir(compiler_dir)
         if clean_build:
-            subprocess.run("xcodebuild clean -workspace gameplay.xcworkspace", shell=True)
+            subprocess.run("xcodebuild clean -workspace gameplay.xcworkspace", shell=False)
             clear_dir(build_dir)
         else:
             if config_debug:
-                subprocess.run("xcodebuild -workspace gameplay.xcworkspace -configuration Debug build", shell=True)
+                subprocess.run("xcodebuild -workspace gameplay.xcworkspace -configuration Debug build", shell=False)
             if config_release:
-                subprocess.run("xcodebuild -workspace gameplay.xcworkspace -configuration Release build", shell=True)
+                subprocess.run("xcodebuild -workspace gameplay.xcworkspace -configuration Release build", shell=False)
     else:
         print("Error: Compiler toolchain not supported.")
