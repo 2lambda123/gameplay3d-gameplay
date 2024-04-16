@@ -13,7 +13,10 @@ from pathlib import Path
 ##############################################################################
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", "--clean", help="Clean only", action="store_true")
-parser.add_argument("-g", "--generate", help="Generates only", action="store_true")
+parser.add_argument("-g",
+                    "--generate",
+                    help="Generates only",
+                    action="store_true")
 parser.add_argument("-b", "--build", help="Builds only", action="store_true")
 parser.add_argument(
     "--configuration",
@@ -78,11 +81,8 @@ def init_vsvars():
     vswhere_path = os.path.expandvars(vswhere_path)
     if not os.path.exists(vswhere_path):
         raise EnvironmentError("vswhere.exe not found at: %s", vswhere_path)
-    vs_path = (
-        os.popen('"{}" -latest -property installationPath'.format(vswhere_path))
-        .read()
-        .rstrip()
-    )
+    vs_path = (os.popen('"{}" -latest -property installationPath'.format(
+        vswhere_path)).read().rstrip())
     vsvars_path = os.path.join(vs_path, "VC\\Auxiliary\\Build\\vcvars64.bat")
     output = os.popen('"{}" && set'.format(vsvars_path)).read()
     for line in output.splitlines():
@@ -148,9 +148,11 @@ if not args.generate:
             clear_dir(build_dir)
         else:
             if config_debug:
-                subprocess.run("msbuild gameplay.sln /property:Configuration=Debug")
+                subprocess.run(
+                    "msbuild gameplay.sln /property:Configuration=Debug")
             if config_release:
-                subprocess.run("msbuild gameplay.sln /property:Configuration=Release")
+                subprocess.run(
+                    "msbuild gameplay.sln /property:Configuration=Release")
     elif toolchain == "gmake":
         compiler_dir = os.path.join(compiler_dir, "gmake")
         os.chdir(compiler_dir)
@@ -166,9 +168,8 @@ if not args.generate:
         compiler_dir = os.path.join(compiler_dir, "xcode4")
         os.chdir(compiler_dir)
         if clean_build:
-            subprocess.run(
-                "xcodebuild clean -workspace gameplay.xcworkspace", shell=True
-            )
+            subprocess.run("xcodebuild clean -workspace gameplay.xcworkspace",
+                           shell=True)
             clear_dir(build_dir)
         else:
             if config_debug:
