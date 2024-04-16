@@ -43,9 +43,9 @@ void Window::set_pos(const Int2& pos)
 
 Int2 Window::get_pos() const
 {
-   Int2 pos;
-   glfwGetWindowSize(handle->glfwWindow, &pos.x, &pos.y);
-   return pos;
+    Int2 pos;
+    glfwGetWindowSize(handle->glfwWindow, &pos.x, &pos.y);
+    return pos;
 }
 
 void Window::set_fullscreen(bool fullscreen)
@@ -226,7 +226,7 @@ void Window::set_input_mode_enabled(gameplay::InputMode mode, bool enabled)
 
     switch (mode)
     {
-        case gameplay::InputMode::STICKY_KEYS:
+    case gameplay::InputMode::STICKY_KEYS:
         setMode = GLFW_STICKY_KEYS;
         break;
     case gameplay::InputMode::STICKY_MOUSE_BUTTONS:

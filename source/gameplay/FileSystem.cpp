@@ -80,12 +80,12 @@ static std::string __winapi_errorcode_to_string(DWORD errorCode);
 static time_t __filetime_to_timet(FILETIME const& ft);
 typedef VisitAction (*OnVisitDirectoryItemFnWindows)(const std::wstring& path, DirectoryInfo* info, void* userPtr);
 static VisitAction __walk_directory_windows(const std::wstring& pathAbsW, const std::wstring& parentW, OnVisitDirectoryItemFnWindows fn, void* userPtr,
-                                            WalkFlags flags, std::list<std::wstring>* files, std::list<std::wstring>* directories);
+        WalkFlags flags, std::list<std::wstring>* files, std::list<std::wstring>* directories);
 #elif GP_PLATFORM_LINUX
 static const size_t PATH_BUFFER_LEN = PATH_MAX + 1;;
 std::vector<std::string> __split_and_fix_linux_path(const std::string& path);
-static VisitAction __walk_directory_linux(const std::string& pathAbs, const std::string& parent, FileSystem::OnVisitDirectoryItemFn fn , void* userPtr,
-                                          WalkFlags flags, std::list<std::string>* files, std::list<std::string>* directories);
+static VisitAction __walk_directory_linux(const std::string& pathAbs, const std::string& parent, FileSystem::OnVisitDirectoryItemFn fn, void* userPtr,
+        WalkFlags flags, std::list<std::string>* files, std::list<std::string>* directories);
 #endif
 static std::string __resolve_path(FileSystem* fileSystem, const char* relativeOrAbsolutePath, const char* base);
 static void __remove_duplicated_slashes(std::string& path);
@@ -373,7 +373,7 @@ time_t FileSystem::get_create_time(const char* path)
     {
         DWORD err = GetLastError();
         GP_LOG_ERROR("Unable to get_create_time() for '%s' (GetFileAttributesExW error: %d/%s)", pathAbs.c_str(), err,
-                       __winapi_errorcode_to_string(err).c_str());
+                     __winapi_errorcode_to_string(err).c_str());
         return 0;
     }
     SYSTEMTIME st;
@@ -404,7 +404,7 @@ time_t FileSystem::get_mod_time(const char* path)
     {
         DWORD errorcode = GetLastError();
         GP_LOG_ERROR("Unable to get_mod_time() for: {} (GetFileAttributesExW failed: {}-{})", path, errorcode,
-                       __winapi_errorcode_to_string(errorcode).c_str());
+                     __winapi_errorcode_to_string(errorcode).c_str());
         return 0;
     }
     SYSTEMTIME st;
@@ -526,7 +526,7 @@ bool FileSystem::make_directory(const char* path, bool createMissingDirectories)
                 if (!::CreateDirectoryW(pathAbsW.c_str(), nullptr))
                 {
                     GP_LOG_ERROR("Failed to make directory'{}'.",
-                        Path::convert_windows_to_utf8_path(pathAbsW).c_str());
+                                 Path::convert_windows_to_utf8_path(pathAbsW).c_str());
                     return false;
                 }
             }
@@ -534,12 +534,12 @@ bool FileSystem::make_directory(const char* path, bool createMissingDirectories)
             {
                 // there is a file with the same name
                 GP_LOG_ERROR("Failed to make directory '%s'. File already exists on this path.",
-                    Path::convert_windows_to_utf8_path(pathAbsW).c_str());
+                             Path::convert_windows_to_utf8_path(pathAbsW).c_str());
                 return false;
             }
             *slash = L'\\';
         }
-    #else
+#else
         // posix realpath doesn't work for paths that don't exist, so the path has to be canonicalized manually
         std::string currentPath;
         for (auto& it : __split_and_fix_linux_path(pathAbs))
@@ -561,7 +561,7 @@ bool FileSystem::make_directory(const char* path, bool createMissingDirectories)
                 return false;
             }
         }
-    #endif
+#endif
         return true;
     }
 }
@@ -766,7 +766,7 @@ bool FileSystem::get_file_info(const char* path, FileInfo* info)
         return false;
     }
     info->type = !(winInfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? DirectoryItemType::FILE :
-                                                                          DirectoryItemType::DIRECTORY;
+                 DirectoryItemType::DIRECTORY;
     info->modTime = __filetime_to_timet(winInfo.ftLastWriteTime);
     info->createTime = __filetime_to_timet(winInfo.ftCreationTime);
     info->size = (size_t(winInfo.nFileSizeHigh) << 32) + winInfo.nFileSizeLow;
@@ -1110,13 +1110,13 @@ std::string __winapi_errorcode_to_string(DWORD errorCode)
                                FORMAT_MESSAGE_FROM_SYSTEM |
                                FORMAT_MESSAGE_IGNORE_INSERTS;
     const DWORD dwFormatResultCode = ::FormatMessageW(kFormatFlags, nullptr, errorCode,
-                                                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                                                    reinterpret_cast<LPWSTR>(&resultMessageBuffer), 0, nullptr);
+                                     MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                                     reinterpret_cast<LPWSTR>(&resultMessageBuffer), 0, nullptr);
     if (dwFormatResultCode == 0)
     {
         const DWORD operationErrorCode = ::GetLastError();
         GP_LOG_ERROR("{} couldn't translate error code {" PRIu32 "}, `FormatMessage` error code is '{" PRIu32 "}'",
-                       __func__, errorCode, operationErrorCode);
+                     __func__, errorCode, operationErrorCode);
         return std::to_string(errorCode);
     }
     assert(resultMessageBuffer);
@@ -1159,7 +1159,7 @@ time_t __filetime_to_timet(FILETIME const& ft)
 }
 
 VisitAction __walk_directory_windows(const std::wstring& pathAbsW, const std::wstring& parentW, OnVisitDirectoryItemFnWindows fn, void* userPtr,
-                                    WalkFlags flags, std::list<std::wstring>* files, std::list<std::wstring>* directories)
+                                     WalkFlags flags, std::list<std::wstring>* files, std::list<std::wstring>* directories)
 {
     WIN32_FIND_DATA findData;
     std::wstring searchPathW = pathAbsW + L"\\*";
@@ -1250,7 +1250,7 @@ VisitAction __walk_directory_windows(const std::wstring& pathAbsW, const std::ws
             if (errorCode != ERROR_NO_MORE_FILES)
             {
                 GP_LOG_ERROR("FindNextFileW returned error code" PRIu32"{} inside '{}'", errorCode,
-                               Path::convert_windows_to_utf8_path(pathAbsW).c_str());
+                             Path::convert_windows_to_utf8_path(pathAbsW).c_str());
             }
         }
     } while (success);
@@ -1259,7 +1259,7 @@ VisitAction __walk_directory_windows(const std::wstring& pathAbsW, const std::ws
     if (!::FindClose(handle))
     {
         GP_LOG_ERROR("FindClose returned error code " PRIu32"{} inside '{}'", ::GetLastError(),
-                       Path::convert_windows_to_utf8_path(pathAbsW).c_str());
+                     Path::convert_windows_to_utf8_path(pathAbsW).c_str());
     }
     return action;
 }
@@ -1475,7 +1475,9 @@ std::string __resolve_path(FileSystem* fileSystem, const char* relativeOrAbsolut
 
 void __remove_duplicated_slashes(std::string& path)
 {
-    path.erase(std::unique(path.begin(), path.end(), [](char a, char b) { return a == '/' && b == '/'; }), path.end());
+    path.erase(std::unique(path.begin(), path.end(), [](char a, char b) {
+        return a == '/' && b == '/';
+    }), path.end());
 }
 
 uint32_t FileSystem::subscribe_to_change_events(const char* path, OnChangeEventFn fn, void* userPtr)
@@ -1484,7 +1486,7 @@ uint32_t FileSystem::subscribe_to_change_events(const char* path, OnChangeEventF
     return 0;
 }
 
-   
+
 void FileSystem::unsubscribe_to_change_events(uint32_t id)
 {
     // todo

@@ -28,12 +28,12 @@ struct RenderFrame
 };
 
 struct Renderer::Impl
-{   
+{
     bool validation{GP_RENDERER_VALIDATION};
     uint32_t minImageCount{GP_RENDERER_MIN_IMAGE_COUNT};
     GLFWwindow* glfwWindow{nullptr};
     VkAllocationCallbacks* allocator{nullptr};
-    VkDebugReportCallbackEXT debugReport{nullptr}; 
+    VkDebugReportCallbackEXT debugReport{nullptr};
     VkInstance instance{VK_NULL_HANDLE};
     VkPhysicalDevice physicalDevice{VK_NULL_HANDLE};
     VkPhysicalDeviceProperties physicalDeviceProperties = {};
@@ -126,10 +126,10 @@ void Renderer::Impl::startup_vulkan()
     auto fs = App::get_app()->get_file_system();
     std::string appName = Path(fs->get_app_executable_path()).get_stem();
     VkApplicationInfo appInfo = {};
-	appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-	appInfo.pApplicationName = appName.c_str();
-	appInfo.pEngineName = appName.c_str();
-	appInfo.apiVersion = VK_API_VERSION_1_0;
+    appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+    appInfo.pApplicationName = appName.c_str();
+    appInfo.pEngineName = appName.c_str();
+    appInfo.apiVersion = VK_API_VERSION_1_0;
 
     // create the vulkan instance
     VkInstanceCreateInfo instanceCreateInfo = {};
@@ -250,7 +250,7 @@ void Renderer::Impl::startup_vulkan()
     {
         queueFamilyIndices.transfer = queueFamilyIndices.graphics;
     }
-        
+
     // Create the logical device
     VkPhysicalDeviceFeatures deviceFeatures = {};
     VkDeviceCreateInfo deviceCreateInfo = {};
@@ -267,7 +267,7 @@ void Renderer::Impl::startup_vulkan()
     {
         deviceExtensions.push_back(VK_EXT_DEBUG_MARKER_EXTENSION_NAME);
     }
-    
+
     if (deviceExtensions.size() > 0)
     {
         deviceCreateInfo.enabledExtensionCount = (uint32_t)deviceExtensions.size();
@@ -561,7 +561,7 @@ void Renderer::Impl::create_or_resize_window_swapchain()
         info.imageExtent.height = surfaceHeight = surfaceCaps.currentExtent.height;
     }
     VK_CHECK_RESULT(vkCreateSwapchainKHR(device, &info, allocator, &swapchain));
-    
+
 
     // get the number of back buffers
     VK_CHECK_RESULT(vkGetSwapchainImagesKHR(device, swapchain, &imageCount, NULL));
@@ -570,7 +570,7 @@ void Renderer::Impl::create_or_resize_window_swapchain()
     // get the back buffer images and assign into the render frames
     std::vector<VkImage> backbuffers;
     backbuffers.resize(imageCount);
-    VK_CHECK_RESULT(vkGetSwapchainImagesKHR(device, swapchain, &imageCount, backbuffers.data()));    
+    VK_CHECK_RESULT(vkGetSwapchainImagesKHR(device, swapchain, &imageCount, backbuffers.data()));
     for (uint32_t i = 0; i < imageCount; i++)
     {
         frames[i].backbuffer = backbuffers[i];
@@ -727,10 +727,10 @@ void Renderer::Impl::next_frame()
 
 void Renderer::Impl::present_frame()
 {
-     if (rebuildSwapchain)
-     {
+    if (rebuildSwapchain)
+    {
         return;
-     }
+    }
     VkSemaphore render_complete_semaphore = frames[semaphoreIndex].renderCompleteSemaphore;
     VkPresentInfoKHR info = {};
     info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
@@ -746,7 +746,7 @@ void Renderer::Impl::present_frame()
         return;
     }
     check_vulkan_result(res);
-    semaphoreIndex = (semaphoreIndex + 1) % imageCount; 
+    semaphoreIndex = (semaphoreIndex + 1) % imageCount;
 }
 
 void Renderer::Impl::startup_imgui()
@@ -772,7 +772,7 @@ void Renderer::Impl::startup_imgui()
         VkCommandBuffer commandBuffer = frames[frameIndex].commandBuffer;
 
         VK_CHECK_RESULT(vkResetCommandPool(device, commandPool, 0));
-        
+
         VkCommandBufferBeginInfo beginInfo = {};
         beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
         beginInfo.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
@@ -785,9 +785,9 @@ void Renderer::Impl::startup_imgui()
         endInfo.commandBufferCount = 1;
         endInfo.pCommandBuffers = &commandBuffer;
         VK_CHECK_RESULT(vkEndCommandBuffer(commandBuffer));
-        
+
         VK_CHECK_RESULT(vkQueueSubmit(queue, 1, &endInfo, VK_NULL_HANDLE));
-        
+
         VK_CHECK_RESULT(vkDeviceWaitIdle(device));
 
         ImGui_ImplVulkan_DestroyFontUploadObjects();

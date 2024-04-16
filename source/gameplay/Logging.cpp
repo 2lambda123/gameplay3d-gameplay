@@ -37,7 +37,7 @@ void Logging::startup()
     if (logFileStr.size() > 0)
     {
         std::string logPath = Path(fs->get_app_directory_path()).join(logFileStr);
-        try 
+        try
         {
             // create a console and file logger
             std::vector<spdlog::sink_ptr> sinks;
@@ -58,7 +58,7 @@ void Logging::startup()
         }
         catch (const spdlog::spdlog_ex& ex)
         {
-            
+
             GP_LOG_WARN("Failed to initialize file logger: {}, {}", logPath.c_str(), ex.what());
         }
     }
@@ -104,7 +104,7 @@ void Logging::set_level(Logging::Level level)
     case Logging::Level::LEVEL_INFO:
         spdlog::set_level(spdlog::level::info);
         break;
-   case Logging::Level::LEVEL_WARN:
+    case Logging::Level::LEVEL_WARN:
         spdlog::set_level(spdlog::level::warn);
         break;
     case Logging::Level::LEVEL_ERROR:

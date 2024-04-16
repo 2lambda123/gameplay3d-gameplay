@@ -47,14 +47,14 @@ static void check_vulkan_result(VkResult res)
     }                                                                                                                 \
 }
 
-VkBool32 log_vulkan_validation_debug_report(VkDebugReportFlagsEXT flags, 
-                                            VkDebugReportObjectTypeEXT objType,
-                                            uint64_t srcObject, 
-                                            size_t location, 
-                                            int32_t msgCode,
-                                            const char* layerPrefix, 
-                                            const char* msg,
-                                            void* userPtr)
+VkBool32 log_vulkan_validation_debug_report(VkDebugReportFlagsEXT flags,
+        VkDebugReportObjectTypeEXT objType,
+        uint64_t srcObject,
+        size_t location,
+        int32_t msgCode,
+        const char* layerPrefix,
+        const char* msg,
+        void* userPtr)
 {
     std::string prefix("");
     if (flags & VK_DEBUG_REPORT_ERROR_BIT_EXT)

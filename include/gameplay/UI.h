@@ -18,11 +18,11 @@ public:
     /**
      * Destructor.
      */
-	~UI();
+    ~UI();
 
 private:
-	void startup();
-	void shutdown();
+    void startup();
+    void shutdown();
     void update();
     struct Impl;
     std::unique_ptr<Impl> _impl;

@@ -39,7 +39,7 @@ public:
     /**
      * Destuctor.
      */
-	~Config();
+    ~Config();
 
     /**
      * Gets a string value from config using the lookup key.
@@ -218,7 +218,7 @@ public:
      */
     void for_each_table(const char* key, OnVisitTableFn fn, void* userPtr);
 
- private:
+private:
     void load(int argc, char** argv);
     struct Impl;
     Impl* _impl = nullptr;

@@ -10,7 +10,7 @@ class GP_API Renderer
 public:
     /**
      * Constructor.
-     * 
+     *
      * @see App::get_renderer() instead.
      */
     Renderer();
@@ -18,11 +18,11 @@ public:
     /**
      * Destructor.
      */
-	~Renderer();
+    ~Renderer();
 
 private:
-	void startup();
-	void shutdown();
+    void startup();
+    void shutdown();
     void update();
     void next_frame();
     void render_frame();

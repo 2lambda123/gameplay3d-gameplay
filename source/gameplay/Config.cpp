@@ -29,9 +29,9 @@ struct Config::Impl
 };
 
 
- Config::Config()
+Config::Config()
 {
-     _impl = new Config::Impl();
+    _impl = new Config::Impl();
 }
 
 Config::~Config()
@@ -59,7 +59,7 @@ void Config::Impl::parse_arg(const std::string& arg)
         }
         else
         {
-             std::string value = arg;
+            std::string value = arg;
             replace_quotes(value);
             args[lastKey] = value;
             lastKey.clear();
@@ -105,12 +105,12 @@ void Config::Impl::parse_from_args(int argc, char** argv)
 
 void Config::load(int argc, char** argv)
 {
-    // set the application 
+    // set the application
     Path appExecutablePath = Path(argv[0]).get_absolute();
     auto fs = App::get_app()->get_file_system();
     fs->set_app_executable_path(appExecutablePath.c_str());
 
-    // parse args 
+    // parse args
     if (argc > 1)
     {
         _impl->parse_from_args(argc, argv);
@@ -129,7 +129,7 @@ void Config::load(int argc, char** argv)
     // 3rd check the repo config path ../../../config/app.config
     bool configFound = true;
     std::string configExt = Path(_impl->configPath).get_extension();
-    if (!fs->exists(_impl->configPath.c_str()) || configExt.compare(GP_CONFIG_EXT) != 0) 
+    if (!fs->exists(_impl->configPath.c_str()) || configExt.compare(GP_CONFIG_EXT) != 0)
     {
         _impl->configPath = Path(appExecutablePath).get_parent().join(Path(GP_CONFIG_FILE_DEFAULT)).get_absolute();
         if (!fs->exists(_impl->configPath.c_str()))
@@ -187,7 +187,7 @@ void Config::load(int argc, char** argv)
         return false;
     }
     fs->close_file(file);
-   
+
     return true;
 }*/
 
@@ -203,8 +203,8 @@ static std::pair<std::string, std::shared_ptr<cpptoml::table>> __get_key_and_tab
     }
     else
     {
-       ret.first = keyStr;
-       ret.second = root;
+        ret.first = keyStr;
+        ret.second = root;
     }
     return ret;
 }

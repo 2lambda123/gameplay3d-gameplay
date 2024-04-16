@@ -41,7 +41,7 @@ static inline auto& _get_wide_converter()
 {
     GP_IGNOREWARNING_MSC_WITH_PUSH(4996)
     static std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter(
-        Unicode::WIDE_TO_UTF8_FAILURE, Unicode::UTF8_TO_WIDE_FAILURE);
+                Unicode::WIDE_TO_UTF8_FAILURE, Unicode::UTF8_TO_WIDE_FAILURE);
     GP_IGNOREWARNING_MSC_POP
     return converter;
 }

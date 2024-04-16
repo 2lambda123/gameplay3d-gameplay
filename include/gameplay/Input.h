@@ -193,7 +193,7 @@ enum class GamepadChangeEvent : uint32_t
 enum class InputMode : uint32_t
 {
     STICKY_KEYS,
-    STICKY_MOUSE_BUTTONS, 
+    STICKY_MOUSE_BUTTONS,
     LOCK_KEY_MODS,
     RAW_MOUSE_MOTION
 };
@@ -219,7 +219,7 @@ enum class CursorStandardShape : uint32_t
  * Defines all static utility for polling for input on the main window.
  *
  * Used for polling keyboard, mouse/cursor and joystick/gamepad actions.
- * 
+ *
  * @see Window for event based input handling.
  */
 class Input
@@ -283,7 +283,7 @@ public:
 
     /**
      * Sets (enables/disables) any special input modes.
-     * 
+     *
      * @param mode The input mode to be set.
      * @param enabled true to enable the input mode, false to disable it.
      */
@@ -339,14 +339,14 @@ public:
 
     /**
      * Checks if a gamepad has a properly configured mappings entry.
-     * 
+     *
      * Based on SDL_GameControllerDB
      * https://github.com/gabomdq/SDL_GameControllerDB
      * A community sourced database of game controller mappings
      * to be used with SDL2 Game Controller functionality.
-     * 
+     *
      * If it is not mapped. Then it is consider unsupported.
-     * @return true if the gamepad is supported in the 
+     * @return true if the gamepad is supported in the
      */
     static bool has_gamepad_mappings_db(int32_t gamepadIndex);
 
@@ -357,7 +357,7 @@ public:
      * https://github.com/gabomdq/SDL_GameControllerDB
      * A community sourced database of game controller mappings
      * to be used with SDL2 Game Controller functionality.
-     * 
+     *
      * @param str The string containing the gamepad mappings.
      * @return true if successfully set, false if an error occurred.
      */

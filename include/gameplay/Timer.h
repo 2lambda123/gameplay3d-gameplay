@@ -52,9 +52,9 @@ public:
      *
      * If timer wasn't stopped before, this return the elapsed time between
      * timer start and this function call, timer will continue to tick.
-     * 
+     *
      * @param resolution Time resolution that you want to get result in.
-     * @return The elapsed time between timer start, and timer stop events. 
+     * @return The elapsed time between timer start, and timer stop events.
      */
     template <typename T = int64_t>
     inline T get_elapsed_time(Resolution resolution = Resolution::MILLISECONDS);

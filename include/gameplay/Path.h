@@ -300,7 +300,7 @@ public:
 
     /**
      * Gets the current path made relative to base.
-     * 
+     *
      * The function does NOT normalize the paths prior to the operation.
      *
      * @param base The base path.

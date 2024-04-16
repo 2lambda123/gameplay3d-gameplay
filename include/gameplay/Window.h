@@ -101,7 +101,7 @@ public:
     bool is_fullscreen() const;
 
     /**
-     * Gets the frame size for each edge of the frame of the window. 
+     * Gets the frame size for each edge of the frame of the window.
      *
      * The frame size includes the title bar, if the window has one.
      * The size of the frame may vary depending on the window-related hints used to create it.
@@ -137,14 +137,14 @@ public:
 
     /**
      * Sets the icon of the window.
-     * 
+     *
      * If passed an array of candidate images, those of or closest
      * to the sizes desired by the system are selected.
 
      * If no images are specified, the window reverts to its default icon.
      *
      * @param images The images.
-     * @param imageCount The number of images passed. 
+     * @param imageCount The number of images passed.
      */
     void set_icon(const Pixmap* images, size_t imageCount);
 
@@ -189,7 +189,7 @@ public:
      * Brings the window to front and sets input focus.
      *
      * The window should already be visible and not minimized.
-     * 
+     *
      * Note: Do not use this function to steal focus from other applications
      * unless you are certain that is what the user wants.
      * Focus stealing can be extremely disruptive.
@@ -216,7 +216,7 @@ public:
      * Minimizes (iconifies) the window.
      *
      * If the window is already minimized, this function does nothing.
-     * 
+     *
      * @see restore() to restore the window back.
      */
     void minimize();
@@ -297,10 +297,10 @@ public:
      * <Window*> The window being content scaled.
      * <Float2> The update x and y content scale.
      */
-    Signal<Window*, Float2> on_content_scale; 
+    Signal<Window*, Float2> on_content_scale;
 
     /**
-     * Sets the window cursor to he 
+     * Sets the window cursor to he
      */
     void set_cursor(Cursor* cursor);
 
@@ -397,7 +397,7 @@ public:
      * Signaled when the user scrolls, whether with a mouse wheel or touchpad gesture.
      *
      * A normal mouse wheel, being vertical, provides offsets along the Y-axis.
-     * 
+     *
      * emits:
      * <Window*> The window the mouse button is actioned in.
      * <Float2> The x,y scroll offset.
@@ -455,7 +455,7 @@ public:
      * The character callback behaves as system text input normally does and will not
      * be called if modifier keys are held down that would prevent normal text input
      * on that platform, for example a Super (Command) key on macOS or Alt key on Windows.
-     * 
+     *
      * emits:
      * <Window*> The window the character is input into.
      * <uint32_t> The unicode point that is entered.

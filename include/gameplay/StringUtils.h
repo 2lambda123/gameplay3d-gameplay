@@ -129,7 +129,7 @@ public:
      * Trims any white space to the lef and right of a string.
      *
      * note: Doesn't trim the space in the middle
-     * 
+     *
      * @param The string to trim.
      * @return The string with the trimed spaces.
      */
@@ -355,25 +355,33 @@ inline std::vector<std::string> StringUtils::split(const std::string& str, char 
 inline void StringUtils::to_lower(std::string& str)
 {
     std::transform(str.begin(), str.end(), str.begin(),
-        [](char ch) {  return static_cast<char>(std::tolower(ch)); });
+    [](char ch) {
+        return static_cast<char>(std::tolower(ch));
+    });
 }
 
 inline void StringUtils::to_upper(std::string& str)
 {
     std::transform(str.begin(), str.end(), str.begin(),
-        [](char ch) { return static_cast<char>(std::toupper(ch)); });
+    [](char ch) {
+        return static_cast<char>(std::toupper(ch));
+    });
 }
 
 inline void StringUtils::ltrim(std::string& str)
 {
     str.erase(str.begin(), std::find_if(str.begin(), str.end(),
-        [](char ch) { return !std::isspace(ch); }));
+    [](char ch) {
+        return !std::isspace(ch);
+    }));
 }
 
 inline void StringUtils::rtrim(std::string& str)
 {
     str.erase(std::find_if(str.rbegin(), str.rend(),
-        [](char ch) { return !std::isspace(ch); }).base(), str.end());
+    [](char ch) {
+        return !std::isspace(ch);
+    }).base(), str.end());
 }
 
 inline void StringUtils::trim(std::string& str)

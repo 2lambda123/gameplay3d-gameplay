@@ -63,9 +63,9 @@ App* App::get_app()
 
 int App::exec(int argc, char** argv)
 {
-	if (_impl->running)
-		return 1;
-	_impl->running = true;
+    if (_impl->running)
+        return 1;
+    _impl->running = true;
 
     // create the file system
     _impl->fs = std::make_shared<FileSystem>();
@@ -79,23 +79,23 @@ int App::exec(int argc, char** argv)
 
     // register file system aliases from config
     _impl->config->for_each_table("resource.alias",
-        [](Config* config, void* userPtr) -> bool
+                                  [](Config* config, void* userPtr) -> bool
+    {
+        App::Impl* impl = (App::Impl*)userPtr;
+        std::string name = config->get_string("name", "");
+        std::string pathStr = config->get_string("path", "");
+        if (App::get_app()->resolve_resource_path(pathStr))
         {
-            App::Impl* impl = (App::Impl*)userPtr;
-            std::string name = config->get_string("name", "");
-            std::string pathStr = config->get_string("path", "");
-            if (App::get_app()->resolve_resource_path(pathStr))
-            {
-                impl->resourceAliases[name] = pathStr;
-            }
-            return true;
-        }, (void*)_impl.get());
+            impl->resourceAliases[name] = pathStr;
+        }
+        return true;
+    }, (void*)_impl.get());
 
 
     // startup the logging system
     _impl->logging = std::make_shared<Logging>();
     _impl->logging->startup();
-    
+
     // startup the glfw windowing
     glfwSetErrorCallback(GLFWUtils::on_error_callback);
     if (!glfwInit())
@@ -103,7 +103,7 @@ int App::exec(int argc, char** argv)
         GP_LOG_ERROR("GLFW initialization failed.");
         return 1;
     }
-    
+
 
     // load the main window from config
     std::string windowTitle = _impl->config->get_string("window.title", "");
@@ -128,11 +128,11 @@ int App::exec(int argc, char** argv)
     // startup the renderer
     _impl->renderer = std::make_shared<Renderer>();
     _impl->renderer->startup();
-   
+
     // run the main window event loop until we should close
     while (!_impl->window->should_close())
     {
-         glfwPollEvents();
+        glfwPollEvents();
 
         _impl->renderer->next_frame();
 
@@ -148,17 +148,21 @@ int App::exec(int argc, char** argv)
     // Sync the monitors first and cleanup the monitor objects
     size_t monitorCount;
     get_monitors(&monitorCount);
-    std::for_each(_impl->monitors.begin(), _impl->monitors.end(), [](auto& monitor){delete monitor;});
+    std::for_each(_impl->monitors.begin(), _impl->monitors.end(), [](auto& monitor) {
+        delete monitor;
+    });
     _impl->monitors.clear();
     // Cleanup the cursors and windows managed objects
     _impl->cursors.clear();
-    std::for_each(_impl->windows.begin(), _impl->windows.end(), [](auto& window){delete window;});
+    std::for_each(_impl->windows.begin(), _impl->windows.end(), [](auto& window) {
+        delete window;
+    });
     _impl->windows.clear();
 
     glfwTerminate();
-    
 
-	return 0;
+
+    return 0;
 }
 
 void App::exit()
@@ -219,32 +223,32 @@ const char* App::get_clipboard_string() const
 
 std::shared_ptr<FileSystem> App::get_file_system() const
 {
-	return _impl->fs;
+    return _impl->fs;
 }
 
 std::shared_ptr<Config> App::get_config() const
 {
-	return _impl->config;
+    return _impl->config;
 }
 
 std::shared_ptr<Logging> App::get_logging() const
 {
-	return _impl->logging;
+    return _impl->logging;
 }
 
 Window* App::get_window() const
 {
-	return _impl->window;
+    return _impl->window;
 }
 
 std::shared_ptr<Renderer> App::get_renderer() const
 {
-	return _impl->renderer;
+    return _impl->renderer;
 }
 
 std::shared_ptr<UI> App::get_ui() const
 {
-	return _impl->ui;
+    return _impl->ui;
 }
 
 void App::set_resource_path(const char* alias, const char* path)
@@ -348,7 +352,7 @@ Window* App::Impl::create_window(const WindowDesc& desc)
     // get the platform window/display
 #if GP_PLATFORM_WINDOWS
     window->handle->platformWindow = glfwGetWin32Window(window->handle->glfwWindow);
- #elif GP_PLATFORM_LINUX
+#elif GP_PLATFORM_LINUX
     window->handle->platformWindow = (void*)glfwGetX11Window(window->handle->glfwWindow);
     window->handle->platformDisplay = glfwGetX11Display();
 #endif

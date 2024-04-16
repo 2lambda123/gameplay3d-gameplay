@@ -28,7 +28,7 @@ Monitor::VideoMode Monitor::get_video_mode() const
     videoMode.blueBits = vidMode->blueBits;
     videoMode.refreshRate = vidMode->refreshRate;
     return videoMode;
-}   
+}
 
 Int2 Monitor::get_physical_size() const
 {
