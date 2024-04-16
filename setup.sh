@@ -3,11 +3,11 @@
 # ./setup.sh
 #
 if [ "$(uname)" == "Darwin" ]; then
-    platform=macos
+  platform=macos
 elif [ "$(expr substr "$(uname -s)" 1 5)" == "Linux" ]; then
-    platform=linux
+  platform=linux
 else
-    platform=windows
+  platform=windows
 fi
 mkdir -p _deps
 # download + install: premake-<platform>.zip -> _deps
