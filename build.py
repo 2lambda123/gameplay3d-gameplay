@@ -8,6 +8,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+from security import safe_command
 
 # build.py arguments
 ##############################################################################
@@ -111,8 +112,7 @@ else:
 compiler_dir = os.path.join(current_dir, COMPILER_FOLDER)
 if not args.build and not args.clean:
     deps_dir = os.path.join(current_dir, DEPS_FOLDER)
-    premake_proc = subprocess.Popen(
-        f"{deps_dir}/premake/premake5 --file=premake5.lua {toolchain}",
+    premake_proc = safe_command.run(subprocess.Popen, f"{deps_dir}/premake/premake5 --file=premake5.lua {toolchain}",
         cwd=current_dir,
         shell=False)
     premake_proc.wait()
