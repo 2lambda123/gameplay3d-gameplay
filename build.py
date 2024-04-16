@@ -56,7 +56,7 @@ def init_vsvars():
     output = os.popen('"{}" && set'.format(vsvars_path)).read()
     for line in output.splitlines():
         pair = line.split("=", 1)
-        if(len(pair) >= 2):
+        if (len(pair) >= 2):
             os.environ[pair[0]] = pair[1]
 
 # building
