@@ -18,7 +18,6 @@ inline Path operator+(const Path& left, const Path& right);
 class GP_API Path
 {
 public:
-
     static constexpr const char* EMPTY_STRING = "";
     static constexpr char DOT_CHAR = '.';
     static constexpr const char* DOT_STRING = ".";
@@ -300,7 +299,7 @@ public:
 
     /**
      * Gets the current path made relative to base.
-     * 
+     *
      * The function does NOT normalize the paths prior to the operation.
      *
      * @param base The base path.
@@ -479,4 +478,4 @@ inline bool operator!=(const char* left, const Path& right)
     return right != left;
 }
 
-}
+} // namespace gameplay

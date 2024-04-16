@@ -17,13 +17,13 @@ namespace gameplay
  * Defines the system for managing and controlling logging output.
  *
  * Example:
- * 
+ *
  * const int x = 9;
- * 
+ *
  * GP_LOG_INFO("Hello Logger number: {}, x);
  *
  * To log message use:
- * 
+ *
  * @see GP_LOG_TRACE()
  * @see GP_LOG_DEBUG()
  * @see GP_LOG_INFO()
@@ -34,8 +34,8 @@ namespace gameplay
 class GP_API Logging
 {
     friend class App;
-public:
 
+public:
     enum class Level : uint32_t
     {
         LEVEL_TRACE,
@@ -82,5 +82,4 @@ private:
     void startup();
     void shutdown();
 };
-}
-
+} // namespace gameplay

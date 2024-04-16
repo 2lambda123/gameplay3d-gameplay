@@ -1,9 +1,9 @@
 #include "Unicode.h"
 #if GP_PLATFORM_WINDOWS
-#   include <codecvt>
-#   include <locale>
+#    include <codecvt>
+#    include <locale>
 #else
-#   include <iconv.h>
+#    include <iconv.h>
 #endif
 
 namespace gameplay
@@ -138,4 +138,4 @@ std::string Unicode::convert_utf32_to_utf8(uint32_t codepoint)
     return u8str;
 }
 
-}
+} // namespace gameplay

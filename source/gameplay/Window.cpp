@@ -43,9 +43,9 @@ void Window::set_pos(const Int2& pos)
 
 Int2 Window::get_pos() const
 {
-   Int2 pos;
-   glfwGetWindowSize(handle->glfwWindow, &pos.x, &pos.y);
-   return pos;
+    Int2 pos;
+    glfwGetWindowSize(handle->glfwWindow, &pos.x, &pos.y);
+    return pos;
 }
 
 void Window::set_fullscreen(bool fullscreen)
@@ -60,13 +60,15 @@ void Window::set_fullscreen(bool fullscreen)
         glfwGetWindowSize(handle->glfwWindow, &handle->size.x, &handle->size.y);
         Monitor* monitor = App::get_app()->get_monitor(this);
         const GLFWvidmode* mode = glfwGetVideoMode(monitor->handle->glfwMonitor);
-        glfwSetWindowMonitor(handle->glfwWindow, monitor->handle->glfwMonitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+        glfwSetWindowMonitor(
+            handle->glfwWindow, monitor->handle->glfwMonitor, 0, 0, mode->width, mode->height, mode->refreshRate);
         glfwSetWindowSize(handle->glfwWindow, mode->width, mode->height);
         handle->fullscreen = true;
     }
     else
     {
-        glfwSetWindowMonitor(handle->glfwWindow, nullptr, handle->pos.x, handle->pos.y, handle->size.x, handle->size.y, GLFW_DONT_CARE);
+        glfwSetWindowMonitor(
+            handle->glfwWindow, nullptr, handle->pos.x, handle->pos.y, handle->size.x, handle->size.y, GLFW_DONT_CARE);
         glfwSetWindowSize(handle->glfwWindow, handle->size.x, handle->size.y);
         handle->fullscreen = false;
     }
@@ -226,7 +228,7 @@ void Window::set_input_mode_enabled(gameplay::InputMode mode, bool enabled)
 
     switch (mode)
     {
-        case gameplay::InputMode::STICKY_KEYS:
+    case gameplay::InputMode::STICKY_KEYS:
         setMode = GLFW_STICKY_KEYS;
         break;
     case gameplay::InputMode::STICKY_MOUSE_BUTTONS:
@@ -270,7 +272,7 @@ bool Window::is_input_mode_enabled(InputMode mode) const
 ButtonAction Window::get_mouse_button_action(MouseButton button)
 {
     int glfwAction = glfwGetMouseButton(handle->glfwWindow, GLFWUtils::to_glfw_button(button));
-    switch(glfwAction)
+    switch (glfwAction)
     {
     case GLFW_PRESS:
         return ButtonAction::PRESS;
@@ -283,7 +285,7 @@ ButtonAction Window::get_mouse_button_action(MouseButton button)
 KeyAction Window::get_key_action(Key key)
 {
     int glfwAction = glfwGetKey(handle->glfwWindow, GLFWUtils::to_glfw_key(key));
-    switch(glfwAction)
+    switch (glfwAction)
     {
     case GLFW_PRESS:
         return KeyAction::PRESS;
@@ -304,4 +306,4 @@ void* Window::get_user_ptr() const
 {
     return handle->userPtr;
 }
-}
+} // namespace gameplay

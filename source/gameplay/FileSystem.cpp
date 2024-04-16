@@ -4,25 +4,25 @@
 #include "Unicode.h"
 #include <sys/stat.h>
 #if GP_PLATFORM_WINDOWS
-#   define NOMINMAX
-#   include <Windows.h>
-#   include <PathCch.h>
-#   include <Shlwapi.h>
-#   include <shellapi.h>
-#   include <cwctype>
-#   include <io.h>
-#   include <winternl.h>
+#    define NOMINMAX
+#    include <Windows.h>
+#    include <PathCch.h>
+#    include <Shlwapi.h>
+#    include <shellapi.h>
+#    include <cwctype>
+#    include <io.h>
+#    include <winternl.h>
 #else
-#   include <sys/sendfile.h>
-#   include <sys/types.h>
-#   include <cerrno>
-#   include <climits>
-#   include <dirent.h>
-#   include <fcntl.h>
-#   include <libgen.h>
-#   include <sstream>
-#   include <unistd.h>
-#   include <vector>
+#    include <sys/sendfile.h>
+#    include <sys/types.h>
+#    include <cerrno>
+#    include <climits>
+#    include <dirent.h>
+#    include <fcntl.h>
+#    include <libgen.h>
+#    include <sstream>
+#    include <unistd.h>
+#    include <vector>
 #endif
 #include <algorithm>
 #include <atomic>
@@ -36,10 +36,10 @@
 #include <thread>
 
 #if GP_PLATFORM_WINDOWS
-#   define strncasecmp(x, y, z) _strnicmp(x, y, z)
-#   define MY_FILENO _fileno
+#    define strncasecmp(x, y, z) _strnicmp(x, y, z)
+#    define MY_FILENO _fileno
 #else
-#   define MY_FILENO fileno
+#    define MY_FILENO fileno
 #endif
 
 namespace gameplay
@@ -62,9 +62,9 @@ struct File
 
 struct FileSystem::Impl
 {
-    std::string appExecutablePath{""};
-    std::string appDirectoryPath{""};
-    char* cwd{nullptr};
+    std::string appExecutablePath{ "" };
+    std::string appDirectoryPath{ "" };
+    char* cwd{ nullptr };
     void update_cwd(const char* cwd);
 };
 
@@ -79,13 +79,24 @@ static void __convert_To_lower(std::wstring& str);
 static std::string __winapi_errorcode_to_string(DWORD errorCode);
 static time_t __filetime_to_timet(FILETIME const& ft);
 typedef VisitAction (*OnVisitDirectoryItemFnWindows)(const std::wstring& path, DirectoryInfo* info, void* userPtr);
-static VisitAction __walk_directory_windows(const std::wstring& pathAbsW, const std::wstring& parentW, OnVisitDirectoryItemFnWindows fn, void* userPtr,
-                                            WalkFlags flags, std::list<std::wstring>* files, std::list<std::wstring>* directories);
+static VisitAction __walk_directory_windows(const std::wstring& pathAbsW,
+                                            const std::wstring& parentW,
+                                            OnVisitDirectoryItemFnWindows fn,
+                                            void* userPtr,
+                                            WalkFlags flags,
+                                            std::list<std::wstring>* files,
+                                            std::list<std::wstring>* directories);
 #elif GP_PLATFORM_LINUX
-static const size_t PATH_BUFFER_LEN = PATH_MAX + 1;;
+static const size_t PATH_BUFFER_LEN = PATH_MAX + 1;
+;
 std::vector<std::string> __split_and_fix_linux_path(const std::string& path);
-static VisitAction __walk_directory_linux(const std::string& pathAbs, const std::string& parent, FileSystem::OnVisitDirectoryItemFn fn , void* userPtr,
-                                          WalkFlags flags, std::list<std::string>* files, std::list<std::string>* directories);
+static VisitAction __walk_directory_linux(const std::string& pathAbs,
+                                          const std::string& parent,
+                                          FileSystem::OnVisitDirectoryItemFn fn,
+                                          void* userPtr,
+                                          WalkFlags flags,
+                                          std::list<std::string>* files,
+                                          std::list<std::string>* directories);
 #endif
 static std::string __resolve_path(FileSystem* fileSystem, const char* relativeOrAbsolutePath, const char* base);
 static void __remove_duplicated_slashes(std::string& path);
@@ -144,7 +155,8 @@ bool FileSystem::set_current_directory_path(const char* path)
     success = ::SetCurrentDirectoryW(winPath.c_str());
     if (!success)
     {
-        GP_LOG_ERROR("Failed to set the current working directory to '{}'. error = " PRIu32 "{}", pathAbs.c_str(),::GetLastError());
+        GP_LOG_ERROR("Failed to set the current working directory to '{}'. error = " PRIu32 "{}", pathAbs.c_str(),
+                     ::GetLastError());
         return false;
     }
     _impl->update_cwd(const_cast<char*>(pathAbs.c_str()));
@@ -331,7 +343,8 @@ bool FileSystem::is_writable(const char* path)
             mapping.GenericAll = FILE_ALL_ACCESS;
             DWORD accessMask = FILE_GENERIC_WRITE;
             ::MapGenericMask(&accessMask, &mapping);
-            if (::AccessCheck(security, duplicateToken, accessMask, &mapping, &privileges, &privilegesLength, &grantedAccess, &accessStatus))
+            if (::AccessCheck(security, duplicateToken, accessMask, &mapping, &privileges, &privilegesLength,
+                              &grantedAccess, &accessStatus))
             {
                 if (accessStatus)
                 {
@@ -373,7 +386,7 @@ time_t FileSystem::get_create_time(const char* path)
     {
         DWORD err = GetLastError();
         GP_LOG_ERROR("Unable to get_create_time() for '%s' (GetFileAttributesExW error: %d/%s)", pathAbs.c_str(), err,
-                       __winapi_errorcode_to_string(err).c_str());
+                     __winapi_errorcode_to_string(err).c_str());
         return 0;
     }
     SYSTEMTIME st;
@@ -404,7 +417,7 @@ time_t FileSystem::get_mod_time(const char* path)
     {
         DWORD errorcode = GetLastError();
         GP_LOG_ERROR("Unable to get_mod_time() for: {} (GetFileAttributesExW failed: {}-{})", path, errorcode,
-                       __winapi_errorcode_to_string(errorcode).c_str());
+                     __winapi_errorcode_to_string(errorcode).c_str());
         return 0;
     }
     SYSTEMTIME st;
@@ -525,8 +538,7 @@ bool FileSystem::make_directory(const char* path, bool createMissingDirectories)
                 // there is no such directory, try to create
                 if (!::CreateDirectoryW(pathAbsW.c_str(), nullptr))
                 {
-                    GP_LOG_ERROR("Failed to make directory'{}'.",
-                        Path::convert_windows_to_utf8_path(pathAbsW).c_str());
+                    GP_LOG_ERROR("Failed to make directory'{}'.", Path::convert_windows_to_utf8_path(pathAbsW).c_str());
                     return false;
                 }
             }
@@ -534,12 +546,12 @@ bool FileSystem::make_directory(const char* path, bool createMissingDirectories)
             {
                 // there is a file with the same name
                 GP_LOG_ERROR("Failed to make directory '%s'. File already exists on this path.",
-                    Path::convert_windows_to_utf8_path(pathAbsW).c_str());
+                             Path::convert_windows_to_utf8_path(pathAbsW).c_str());
                 return false;
             }
             *slash = L'\\';
         }
-    #else
+#else
         // posix realpath doesn't work for paths that don't exist, so the path has to be canonicalized manually
         std::string currentPath;
         for (auto& it : __split_and_fix_linux_path(pathAbs))
@@ -561,7 +573,7 @@ bool FileSystem::make_directory(const char* path, bool createMissingDirectories)
                 return false;
             }
         }
-    #endif
+#endif
         return true;
     }
 }
@@ -573,8 +585,8 @@ bool FileSystem::remove_directory(const char* path)
     std::wstring pathAbsW = Path::convert_utf8_to_windows_path(pathAbs);
     std::list<std::wstring> files;
     std::list<std::wstring> directories;
-    __walk_directory_windows(
-        pathAbsW, pathAbsW, nullptr, nullptr, WALK_FLAGS_RECURSIVE | WALK_FLAGS_SYMLINKS_ARE_FILES, &files, &directories);
+    __walk_directory_windows(pathAbsW, pathAbsW, nullptr, nullptr, WALK_FLAGS_RECURSIVE | WALK_FLAGS_SYMLINKS_ARE_FILES,
+                             &files, &directories);
 
     for (std::wstring& file : files)
     {
@@ -765,8 +777,8 @@ bool FileSystem::get_file_info(const char* path, FileInfo* info)
     {
         return false;
     }
-    info->type = !(winInfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? DirectoryItemType::FILE :
-                                                                          DirectoryItemType::DIRECTORY;
+    info->type =
+        !(winInfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? DirectoryItemType::FILE : DirectoryItemType::DIRECTORY;
     info->modTime = __filetime_to_timet(winInfo.ftLastWriteTime);
     info->createTime = __filetime_to_timet(winInfo.ftCreationTime);
     info->size = (size_t(winInfo.nFileSizeHigh) << 32) + winInfo.nFileSizeLow;
@@ -1106,22 +1118,20 @@ std::string __winapi_errorcode_to_string(DWORD errorCode)
         return std::string();
     }
     LPWSTR resultMessageBuffer = nullptr;
-    const DWORD kFormatFlags = FORMAT_MESSAGE_ALLOCATE_BUFFER |
-                               FORMAT_MESSAGE_FROM_SYSTEM |
-                               FORMAT_MESSAGE_IGNORE_INSERTS;
-    const DWORD dwFormatResultCode = ::FormatMessageW(kFormatFlags, nullptr, errorCode,
-                                                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                                                    reinterpret_cast<LPWSTR>(&resultMessageBuffer), 0, nullptr);
+    const DWORD kFormatFlags =
+        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
+    const DWORD dwFormatResultCode =
+        ::FormatMessageW(kFormatFlags, nullptr, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                         reinterpret_cast<LPWSTR>(&resultMessageBuffer), 0, nullptr);
     if (dwFormatResultCode == 0)
     {
         const DWORD operationErrorCode = ::GetLastError();
         GP_LOG_ERROR("{} couldn't translate error code {" PRIu32 "}, `FormatMessage` error code is '{" PRIu32 "}'",
-                       __func__, errorCode, operationErrorCode);
+                     __func__, errorCode, operationErrorCode);
         return std::to_string(errorCode);
     }
     assert(resultMessageBuffer);
-    const auto localMemDeleter = [](LPWSTR str)
-    {
+    const auto localMemDeleter = [](LPWSTR str) {
         if (str)
         {
             ::LocalFree(str);
@@ -1158,8 +1168,13 @@ time_t __filetime_to_timet(FILETIME const& ft)
     return ull.QuadPart / 10000000ULL - 11644473600ULL;
 }
 
-VisitAction __walk_directory_windows(const std::wstring& pathAbsW, const std::wstring& parentW, OnVisitDirectoryItemFnWindows fn, void* userPtr,
-                                    WalkFlags flags, std::list<std::wstring>* files, std::list<std::wstring>* directories)
+VisitAction __walk_directory_windows(const std::wstring& pathAbsW,
+                                     const std::wstring& parentW,
+                                     OnVisitDirectoryItemFnWindows fn,
+                                     void* userPtr,
+                                     WalkFlags flags,
+                                     std::list<std::wstring>* files,
+                                     std::list<std::wstring>* directories)
 {
     WIN32_FIND_DATA findData;
     std::wstring searchPathW = pathAbsW + L"\\*";
@@ -1215,7 +1230,8 @@ VisitAction __walk_directory_windows(const std::wstring& pathAbsW, const std::ws
                     childPathAbsW.append(L"\\");
                     childPathAbsW.append(fileNameW);
                     childPathAbsW = Path::fix_windows_path_prefixes(childPathAbsW);
-                    if ((action = __walk_directory_windows(childPathAbsW, pathW, fn, userPtr, flags, files, directories)) == VisitAction::STOP)
+                    if ((action = __walk_directory_windows(
+                             childPathAbsW, pathW, fn, userPtr, flags, files, directories)) == VisitAction::STOP)
                     {
                         break;
                     }
@@ -1249,8 +1265,8 @@ VisitAction __walk_directory_windows(const std::wstring& pathAbsW, const std::ws
             DWORD errorCode = GetLastError();
             if (errorCode != ERROR_NO_MORE_FILES)
             {
-                GP_LOG_ERROR("FindNextFileW returned error code" PRIu32"{} inside '{}'", errorCode,
-                               Path::convert_windows_to_utf8_path(pathAbsW).c_str());
+                GP_LOG_ERROR("FindNextFileW returned error code" PRIu32 "{} inside '{}'", errorCode,
+                             Path::convert_windows_to_utf8_path(pathAbsW).c_str());
             }
         }
     } while (success);
@@ -1258,8 +1274,8 @@ VisitAction __walk_directory_windows(const std::wstring& pathAbsW, const std::ws
     // When the search handle is no longer needed, close it by using the FindClose function, not CloseHandle.
     if (!::FindClose(handle))
     {
-        GP_LOG_ERROR("FindClose returned error code " PRIu32"{} inside '{}'", ::GetLastError(),
-                       Path::convert_windows_to_utf8_path(pathAbsW).c_str());
+        GP_LOG_ERROR("FindClose returned error code " PRIu32 "{} inside '{}'", ::GetLastError(),
+                     Path::convert_windows_to_utf8_path(pathAbsW).c_str());
     }
     return action;
 }
@@ -1398,7 +1414,8 @@ VisitAction __walk_directory_linux(const std::string& pathAbs,
                     std::string childPathAbs = pathAbs;
                     childPathAbs.append("/");
                     childPathAbs.append(fileName);
-                    if ((action = __walk_directory_linux(childPathAbs, path, fn, userPtr, flags, files, directories)) == VisitAction::STOP)
+                    if ((action = __walk_directory_linux(childPathAbs, path, fn, userPtr, flags, files, directories)) ==
+                        VisitAction::STOP)
                     {
                         break;
                     }
@@ -1484,9 +1501,9 @@ uint32_t FileSystem::subscribe_to_change_events(const char* path, OnChangeEventF
     return 0;
 }
 
-   
+
 void FileSystem::unsubscribe_to_change_events(uint32_t id)
 {
     // todo
 }
-}
+} // namespace gameplay

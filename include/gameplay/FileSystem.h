@@ -68,10 +68,10 @@ class GP_API FileSystem
 {
     friend class App;
     friend class Config;
-public:
 
+public:
     /**
-     * Changes events for files and directories on the file system. 
+     * Changes events for files and directories on the file system.
      */
     enum class ChangeEvent
     {
@@ -137,7 +137,7 @@ public:
      */
     bool is_directory(const char* path);
 
-     /**
+    /**
      * Checks is a file is a writable.
      *
      * @param path The path to check.
@@ -163,7 +163,7 @@ public:
 
     /**
      * Gets an operating system specific canonical path relative to the base.
-     * 
+     *
      * @param path The absolute or relative path. The path must exist.
      * @param base The base path to resolve relative path against. Can be nullptr.
      * @return The operating system specific canonical path relative to the base.
@@ -182,20 +182,20 @@ public:
     /**
      * Makes a directory on the file system.
      *
-     * @param path The path to the directory to create. 
-     * @param createMissingDirectories if true it will create any missing directories to make the 
-     * 
+     * @param path The path to the directory to create.
+     * @param createMissingDirectories if true it will create any missing directories to make the
+     *
      * @return true if the creation was successful, fails if fails.
      */
     bool make_directory(const char* path, bool createMissingDirectories = true);
 
     /**
      * Removes (deletes) a directory from the file system.
-     * 
+     *
      * This will never follow symbolic links. The symbolic link will be removed, but its target will not.
      * To remove the currect directory, you must first change to another directory and then remove it.
-     * 
-     * @param path The path to the directory to remove. 
+     *
+     * @param path The path to the directory to remove.
      * @return true if the removal was successful, false is not successful.
      */
     bool remove_directory(const char* path);
@@ -205,16 +205,16 @@ public:
      *
      * This can fail by either having the file still open by either the calling process or another process,
      * or by not having sufficient permission to delete the file.
-     * 
-     * @param path The path of the file to be removed. 
+     *
+     * @param path The path of the file to be removed.
      * @returns true if the file was removed from the file system, false if not successful.
      */
     bool remove_file(const char* path);
 
     /**
      * Moves (renames) a file or directory on the file system.
-     * 
-     * @param src The source path to a file or directory to rename. 
+     *
+     * @param src The source path to a file or directory to rename.
      * @param dst The destination path.
      * @return true of the move was successful, false is not successful.
      */
@@ -222,8 +222,8 @@ public:
 
     /**
      * Copy a file on the file system to a new destination.
-     * 
-     * @param src The source path to a file to copy. 
+     *
+     * @param src The source path to a file to copy.
      * @param dst The destination filename and path.
      * @return true of the copy was successful, false is not successful.
      */
@@ -242,14 +242,14 @@ public:
      * Opens a file on the file system for binary mode with the specifed file mode access.
      *
      * The file opened must closed with close_file() when it is no longer needed.
-     * 
+     *
      * Any files opened with FileMode::WRITE, FileMode::READ_WRITE or FileMode::APPEND
      * that do not exist will be create if the file does not already exist.
      *
      * Files opened with FileMode::READ, FileMode::WRITE or FileMode::READ_WRITE will be initially positioned
      * to the beginning of the file. Files opened with FileMode::APPEND will be initiallly positioned to the
      * end of the file.
-     * 
+     *
      * @param path The path to the file to open.
      * @param The file mode for which to access the file.
      * @param The handle for the file opened if successful or nullptr if not successful.
@@ -314,9 +314,9 @@ public:
      * Reads a line of character data from a text file.
      *
      * A read line will not include any line termination characters.
-     * 
+     *
      * @param file The handle of the file to read.
-     * @param line The string that will receive the read line. 
+     * @param line The string that will receive the read line.
      * @param maxLineSize The maximum number of characters that can be read into 'line', including null termination.
      *  If the buffer is exhausted before end-of-line is reached the buffer will be null terminated and thus still a
      *  proper string but won't necessarily contain the full line from the file.
@@ -330,8 +330,9 @@ public:
      * A newline will always be appended to the string in the file if it is successfully written.
      *
      * @param file The handle of the file to read.
-     * @param line The null-terminated string to write. 
-     * @returns true if the full line is successfully written to the file, false if the full string could not be written to the file.
+     * @param line The null-terminated string to write.
+     * @returns true if the full line is successfully written to the file, false if the full string could not be written
+     * to the file.
      */
     bool write_file_line(File* file, const char* line);
 
@@ -377,8 +378,8 @@ public:
      * file at that new position or the file is truncated at the current position with truncate_file_at_current_pos().
      * When it is written to or truncated with a larger size than previous, the new space  will be filled with zeros.
      * However, that if the file pointer is set beyond the end of the file, the get_file_pos() call will return that
-     * same position even though it is larger than the file currently is. 
-     * 
+     * same position even though it is larger than the file currently is.
+     *
      * @param The handle of the file to set the current position for.
      * @param offsetFromWhence The new position for the file cursor relative to the location specified in whence.
      *  This value may be negative only if whence is not FileWhence::BEGIN. This may specify an index beyond the
@@ -421,7 +422,7 @@ public:
      * this function to set the new end of the file.  The new area of the file will be
      * filled with zeros if it was extended. If the file is being shortened, all data
      * in the file beyond the current file pointer will be removed.
-     * 
+     *
      * @param file The handle to the file to be truncated.
      * @return true if the file was successfully truncated,
      *  false if the file could not be truncated for any reason.
@@ -430,7 +431,7 @@ public:
 
     /**
      * Gets the current file status of a stream.
-     * 
+     *
      * FileStreamStatus::STREAM_OK Is the file stream is still in a valid state and more read or
      *  write operation may potentially succeed.
      * FileStatus::STREAM_ERROR Is if the file stream has encountered an error of any kind.
@@ -500,7 +501,7 @@ public:
 
     /**
      * Unsubscribes from listening to change events based on subscription path.
-     * 
+     *
      * @param id The subscription id to unsubscribe from.
      */
     void unsubscribe_to_change_events(uint32_t id);
@@ -510,4 +511,4 @@ private:
     struct Impl;
     std::unique_ptr<Impl> _impl;
 };
-}
+} // namespace gameplay

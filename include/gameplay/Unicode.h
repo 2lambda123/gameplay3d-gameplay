@@ -13,7 +13,7 @@ namespace gameplay
  *
  * Note:
  * Use the 'Path' class instead when converting windows file system paths instead of this class.
- * 
+ *
  * @see Path::convert_utf8_to_windows_path
  * @see Path::convert_windows_to_utf8_path
  */
@@ -79,13 +79,13 @@ public:
 
     /**
      * Converts a utf-8 encoded string to Windows wide character array
-     * Do not use this function for Windows file path conversion! 
+     * Do not use this function for Windows file path conversion!
      *
      * @param utf8 Input string to convert, in UTF-8 encoding.
      * @return Wide string version of utf8 or UTF8_TO_WIDE_FAILURE message if conversion cannot be performed.
      */
     static std::wstring convert_utf8_to_wide(const std::string& utf8);
-    
+
     /**
      * Performs a case-sensitive comparison of wide strings in Unicode (Windows) using system default locale.
      *
@@ -139,4 +139,4 @@ public:
 };
 
 
-}
+} // namespace gameplay

@@ -22,36 +22,35 @@ class Window;
 /**
  * The main application.
  *
- * Controls the application runtime and main sub-systems. 
+ * Controls the application runtime and main sub-systems.
  */
 class GP_API App
 {
 public:
-
     /**
      * Destructor.
      */
     ~App();
 
-	/**
-	 * Gets the application instance.
+    /**
+     * Gets the application instance.
      *
      * @return The application instance
-	 */
-	static App* get_app();
+     */
+    static App* get_app();
 
-	/**
-	 * Runs the main event loop and waits until exit() is called.
+    /**
+     * Runs the main event loop and waits until exit() is called.
      *
      * @param argc The number of comand-line arguments passed.
      * @param argv The command-line arguement strings.
-	 */
-	int exec(int argc, char** argv);
+     */
+    int exec(int argc, char** argv);
 
-	/**
-	 * Exits the application.
-	 */
-	void exit();
+    /**
+     * Exits the application.
+     */
+    void exit();
 
     /**
      * Set the current application running time (in seconds).
@@ -186,10 +185,10 @@ public:
      * that already exist.
      *
      * The system is populated with the following resource paths:
-     * 
+     *
      * @app.dir
      * @config.dir
-     * 
+     *
      * @param alias The alias to be set.
      * @param path The directory path for the alias to use.
      */
@@ -209,7 +208,7 @@ public:
      *
      * This does not validate the paths exist. So you can also
      * resolve path that maybe intended for directory creation.
-     * 
+     *
      * @param path The resource path to be resolved.
      * @return true if the path can be resolved, false cannot be resolved due to missing tokens.
      */
@@ -223,7 +222,7 @@ public:
      */
     Signal<App*> on_startup;
 
-     /**
+    /**
      * Signals the application has started to shutdown.
      *
      * emits:
@@ -232,8 +231,8 @@ public:
     Signal<App*> on_shutdown;
 
 private:
-	App();
-	struct Impl;
+    App();
+    struct Impl;
     std::unique_ptr<Impl> _impl;
 };
-}
+} // namespace gameplay

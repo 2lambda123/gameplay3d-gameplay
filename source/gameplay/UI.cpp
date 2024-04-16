@@ -11,7 +11,6 @@ namespace gameplay
 
 struct UI::Impl
 {
-
 };
 
 UI::UI()
@@ -34,8 +33,8 @@ void UI::startup()
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-    //io.ConfigViewportsNoAutoMerge = true;
-    //io.ConfigViewportsNoTaskBarIcon = true;
+    // io.ConfigViewportsNoAutoMerge = true;
+    // io.ConfigViewportsNoTaskBarIcon = true;
 
     ImGui::StyleColorsDark();
     ImGuiStyle& style = ImGui::GetStyle();
@@ -81,4 +80,4 @@ void UI::update()
 
     ImGui::Render();
 }
-}
+} // namespace gameplay

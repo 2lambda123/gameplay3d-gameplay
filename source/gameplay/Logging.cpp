@@ -37,7 +37,7 @@ void Logging::startup()
     if (logFileStr.size() > 0)
     {
         std::string logPath = Path(fs->get_app_directory_path()).join(logFileStr);
-        try 
+        try
         {
             // create a console and file logger
             std::vector<spdlog::sink_ptr> sinks;
@@ -50,15 +50,16 @@ void Logging::startup()
             set_level(level);
             spdlog::set_pattern("[%Y-%m-%d][%H:%M:%S.%e] [%^%l%$] %v");
             spdlog::flush_on(spdlog::level::info);
-            //spdlog::flush_every(std::chrono::seconds(1));
+            // spdlog::flush_every(std::chrono::seconds(1));
             GP_LOG_INFO("=================================================================================");
             GP_LOG_INFO("LOG LEVEL: {}", logLevelStr.c_str());
             GP_LOG_INFO("LOG FILE: {}", logPath.c_str());
-            GP_LOG_INFO("==================================================================================", logPath.c_str());
+            GP_LOG_INFO(
+                "==================================================================================", logPath.c_str());
         }
         catch (const spdlog::spdlog_ex& ex)
         {
-            
+
             GP_LOG_WARN("Failed to initialize file logger: {}, {}", logPath.c_str(), ex.what());
         }
     }
@@ -93,7 +94,7 @@ Logging::Level Logging::parse_level(const char* str)
 
 void Logging::set_level(Logging::Level level)
 {
-    switch(level)
+    switch (level)
     {
     case Logging::Level::LEVEL_TRACE:
         spdlog::set_level(spdlog::level::trace);
@@ -104,7 +105,7 @@ void Logging::set_level(Logging::Level level)
     case Logging::Level::LEVEL_INFO:
         spdlog::set_level(spdlog::level::info);
         break;
-   case Logging::Level::LEVEL_WARN:
+    case Logging::Level::LEVEL_WARN:
         spdlog::set_level(spdlog::level::warn);
         break;
     case Logging::Level::LEVEL_ERROR:
@@ -122,7 +123,7 @@ void Logging::set_level(Logging::Level level)
 Logging::Level Logging::get_level() const
 {
     auto level = spdlog::get_level();
-    switch(level)
+    switch (level)
     {
     case spdlog::level::trace:
         return Logging::Level::LEVEL_TRACE;
@@ -143,4 +144,4 @@ Logging::Level Logging::get_level() const
     }
 }
 
-}
+} // namespace gameplay

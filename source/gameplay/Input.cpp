@@ -112,5 +112,5 @@ void* Input::get_gamepad_user_ptr(int32_t gamepadIndex)
 {
     return glfwGetJoystickUserPointer(gamepadIndex);
 }
-}
+} // namespace gameplay
 GP_ASSERT_STRUCTS_MATCH(GLFWgamepadstate, gameplay::GamepadState);

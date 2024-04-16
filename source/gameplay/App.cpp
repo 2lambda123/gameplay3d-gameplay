@@ -24,15 +24,15 @@ namespace gameplay
 struct App::Impl
 {
     bool running = false;
-    Window* window{nullptr};
+    Window* window{ nullptr };
     std::unordered_set<Window*> windows;
     std::vector<Monitor*> monitors;
     std::unordered_set<std::shared_ptr<Cursor>> cursors;
-    std::shared_ptr<FileSystem> fs{nullptr};
-    std::shared_ptr<Config> config{nullptr};
-    std::shared_ptr<Logging> logging{nullptr};
-    std::shared_ptr<Renderer> renderer{nullptr};
-    std::shared_ptr<UI> ui{nullptr};
+    std::shared_ptr<FileSystem> fs{ nullptr };
+    std::shared_ptr<Config> config{ nullptr };
+    std::shared_ptr<Logging> logging{ nullptr };
+    std::shared_ptr<Renderer> renderer{ nullptr };
+    std::shared_ptr<UI> ui{ nullptr };
     std::unordered_map<std::string, std::string> resourceAliases;
 
     Window* create_window(const WindowDesc& desc);
@@ -63,9 +63,9 @@ App* App::get_app()
 
 int App::exec(int argc, char** argv)
 {
-	if (_impl->running)
-		return 1;
-	_impl->running = true;
+    if (_impl->running)
+        return 1;
+    _impl->running = true;
 
     // create the file system
     _impl->fs = std::make_shared<FileSystem>();
@@ -78,9 +78,9 @@ int App::exec(int argc, char** argv)
     _impl->resourceAliases["app.dir"] = _impl->fs->get_app_directory_path();
 
     // register file system aliases from config
-    _impl->config->for_each_table("resource.alias",
-        [](Config* config, void* userPtr) -> bool
-        {
+    _impl->config->for_each_table(
+        "resource.alias",
+        [](Config* config, void* userPtr) -> bool {
             App::Impl* impl = (App::Impl*)userPtr;
             std::string name = config->get_string("name", "");
             std::string pathStr = config->get_string("path", "");
@@ -89,13 +89,14 @@ int App::exec(int argc, char** argv)
                 impl->resourceAliases[name] = pathStr;
             }
             return true;
-        }, (void*)_impl.get());
+        },
+        (void*)_impl.get());
 
 
     // startup the logging system
     _impl->logging = std::make_shared<Logging>();
     _impl->logging->startup();
-    
+
     // startup the glfw windowing
     glfwSetErrorCallback(GLFWUtils::on_error_callback);
     if (!glfwInit())
@@ -103,7 +104,7 @@ int App::exec(int argc, char** argv)
         GP_LOG_ERROR("GLFW initialization failed.");
         return 1;
     }
-    
+
 
     // load the main window from config
     std::string windowTitle = _impl->config->get_string("window.title", "");
@@ -119,7 +120,7 @@ int App::exec(int argc, char** argv)
     // adjust the window position where the frame is at 0, 0
     int top;
     _impl->window->get_frame_size(nullptr, &top, nullptr, nullptr);
-    _impl->window->set_pos({0, top});
+    _impl->window->set_pos({ 0, top });
 
     // startup the ui system
     _impl->ui = std::make_shared<UI>();
@@ -128,11 +129,11 @@ int App::exec(int argc, char** argv)
     // startup the renderer
     _impl->renderer = std::make_shared<Renderer>();
     _impl->renderer->startup();
-   
+
     // run the main window event loop until we should close
     while (!_impl->window->should_close())
     {
-         glfwPollEvents();
+        glfwPollEvents();
 
         _impl->renderer->next_frame();
 
@@ -148,17 +149,17 @@ int App::exec(int argc, char** argv)
     // Sync the monitors first and cleanup the monitor objects
     size_t monitorCount;
     get_monitors(&monitorCount);
-    std::for_each(_impl->monitors.begin(), _impl->monitors.end(), [](auto& monitor){delete monitor;});
+    std::for_each(_impl->monitors.begin(), _impl->monitors.end(), [](auto& monitor) { delete monitor; });
     _impl->monitors.clear();
     // Cleanup the cursors and windows managed objects
     _impl->cursors.clear();
-    std::for_each(_impl->windows.begin(), _impl->windows.end(), [](auto& window){delete window;});
+    std::for_each(_impl->windows.begin(), _impl->windows.end(), [](auto& window) { delete window; });
     _impl->windows.clear();
 
     glfwTerminate();
-    
 
-	return 0;
+
+    return 0;
 }
 
 void App::exit()
@@ -219,32 +220,32 @@ const char* App::get_clipboard_string() const
 
 std::shared_ptr<FileSystem> App::get_file_system() const
 {
-	return _impl->fs;
+    return _impl->fs;
 }
 
 std::shared_ptr<Config> App::get_config() const
 {
-	return _impl->config;
+    return _impl->config;
 }
 
 std::shared_ptr<Logging> App::get_logging() const
 {
-	return _impl->logging;
+    return _impl->logging;
 }
 
 Window* App::get_window() const
 {
-	return _impl->window;
+    return _impl->window;
 }
 
 std::shared_ptr<Renderer> App::get_renderer() const
 {
-	return _impl->renderer;
+    return _impl->renderer;
 }
 
 std::shared_ptr<UI> App::get_ui() const
 {
-	return _impl->ui;
+    return _impl->ui;
 }
 
 void App::set_resource_path(const char* alias, const char* path)
@@ -262,7 +263,7 @@ bool App::resolve_resource_path(std::string& resourcePath)
     std::string path = resourcePath;
     size_t startPos = 0;
     const std::string startDelim = "@";
-    while((startPos = path.find(startDelim, startPos)) != std::string::npos)
+    while ((startPos = path.find(startDelim, startPos)) != std::string::npos)
     {
         const std::string stopDelim = "/";
         size_t endPos = path.find(stopDelim, startPos);
@@ -271,7 +272,7 @@ bool App::resolve_resource_path(std::string& resourcePath)
             size_t aliasLen = endPos - startPos;
             std::string alias = path.substr(startPos + 1, aliasLen - 1);
             auto pair = _impl->resourceAliases.find(alias);
-            if ( pair == _impl->resourceAliases.end())
+            if (pair == _impl->resourceAliases.end())
                 return false;
             std::string aliasPath = _impl->resourceAliases[alias];
             path.replace(startPos, aliasLen, aliasPath);
@@ -294,7 +295,7 @@ Window* App::Impl::create_window(const WindowDesc& desc)
     glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
 
     // apply user supplied window hints
-    glfwWindowHint(GLFW_RESIZABLE, (desc.hints & WINDOW_HINT_NO_RESIZE) ? GLFW_FALSE: GLFW_TRUE);
+    glfwWindowHint(GLFW_RESIZABLE, (desc.hints & WINDOW_HINT_NO_RESIZE) ? GLFW_FALSE : GLFW_TRUE);
     glfwWindowHint(GLFW_DECORATED, (desc.hints & WINDOW_HINT_NO_DECORATION) ? GLFW_FALSE : GLFW_TRUE);
     glfwWindowHint(GLFW_AUTO_ICONIFY, (desc.hints & WINDOW_HINT_NO_AUTO_ICONIFY) ? GLFW_FALSE : GLFW_TRUE);
     glfwWindowHint(GLFW_FOCUS_ON_SHOW, (desc.hints & WINDOW_HINT_NO_FOCUS_ON_SHOW) ? GLFW_FALSE : GLFW_TRUE);
@@ -348,7 +349,7 @@ Window* App::Impl::create_window(const WindowDesc& desc)
     // get the platform window/display
 #if GP_PLATFORM_WINDOWS
     window->handle->platformWindow = glfwGetWin32Window(window->handle->glfwWindow);
- #elif GP_PLATFORM_LINUX
+#elif GP_PLATFORM_LINUX
     window->handle->platformWindow = (void*)glfwGetX11Window(window->handle->glfwWindow);
     window->handle->platformDisplay = glfwGetX11Display();
 #endif
@@ -384,7 +385,7 @@ Monitor* App::Impl::get_monitor(Window* window)
     {
         Monitor* monitor = monitors[i];
         Int2 monitorPos = monitor->get_pos();
-        Int2 monitorSize = { monitor->get_video_mode().width, monitor->get_video_mode().height};
+        Int2 monitorSize = { monitor->get_video_mode().width, monitor->get_video_mode().height };
         Int2 windowPosSize;
         windowPosSize.x = windowPos.x + windowSize.x;
         windowPosSize.y = windowPos.y + windowSize.y;
@@ -451,7 +452,7 @@ std::shared_ptr<Cursor> App::Impl::create_cursor(CursorStandardShape shape)
 
 std::shared_ptr<Cursor> App::Impl::create_cursor(const Pixmap* image, Int2 hotspotPos)
 {
-    std::shared_ptr<Cursor> cursor{nullptr};
+    std::shared_ptr<Cursor> cursor{ nullptr };
     GLFWcursor* glfwCursor = glfwCreateCursor((const GLFWimage*)image, hotspotPos.x, hotspotPos.y);
     if (glfwCursor)
     {
@@ -470,6 +471,6 @@ void App::Impl::destroy_cursor(std::shared_ptr<Cursor> cursor)
         cursors.erase(cursor);
     }
 }
-}
+} // namespace gameplay
 
 GP_ASSERT_STRUCTS_MATCH(GLFWimage, gameplay::Pixmap);

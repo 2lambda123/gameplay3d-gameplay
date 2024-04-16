@@ -28,7 +28,6 @@ class GP_API Config
     friend class App;
 
 public:
-
     /**
      * Constructor.
      *
@@ -39,7 +38,7 @@ public:
     /**
      * Destuctor.
      */
-	~Config();
+    ~Config();
 
     /**
      * Gets a string value from config using the lookup key.
@@ -205,7 +204,7 @@ public:
      * @param The config interface to use for accessing internal table config.
      * @param userPtr The user pointer specified when for_each_table
      */
-    typedef bool(*OnVisitTableFn)(Config* config, void* userPtr);
+    typedef bool (*OnVisitTableFn)(Config* config, void* userPtr);
 
     /**
      * Iterates of the table of array at the specifed key.
@@ -218,11 +217,10 @@ public:
      */
     void for_each_table(const char* key, OnVisitTableFn fn, void* userPtr);
 
- private:
+private:
     void load(int argc, char** argv);
     struct Impl;
     Impl* _impl = nullptr;
 };
 
-}
-
+} // namespace gameplay

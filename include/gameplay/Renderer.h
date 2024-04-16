@@ -7,10 +7,11 @@ namespace gameplay
 class GP_API Renderer
 {
     friend class App;
+
 public:
     /**
      * Constructor.
-     * 
+     *
      * @see App::get_renderer() instead.
      */
     Renderer();
@@ -18,11 +19,11 @@ public:
     /**
      * Destructor.
      */
-	~Renderer();
+    ~Renderer();
 
 private:
-	void startup();
-	void shutdown();
+    void startup();
+    void shutdown();
     void update();
     void next_frame();
     void render_frame();
@@ -30,4 +31,4 @@ private:
     struct Impl;
     std::unique_ptr<Impl> _impl;
 };
-}
+} // namespace gameplay

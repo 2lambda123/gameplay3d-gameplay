@@ -23,8 +23,8 @@ class GP_API Monitor
 {
     friend class App;
     friend class Window;
-public:
 
+public:
     struct VideoMode
     {
         int32_t width;
@@ -42,7 +42,7 @@ public:
     };
 
     /**
-     * Constructor. 
+     * Constructor.
      */
     Monitor();
 
@@ -90,13 +90,13 @@ public:
      * their DPI and scaling settings. This relies on the system DPI
      * and scaling settings being somewhat correct.
      *
-     * @return The content scale for the monitor. 
+     * @return The content scale for the monitor.
      */
     Float2 get_content_scale() const;
 
     /**
      * Gets the position and size of the work area.
-     * 
+     *
      * The position, in screen coordinates, of the upper-left corner
      * of the work area of the specified monitor along with the
      * work area size in screen coordinates. The work area is defined
@@ -124,4 +124,4 @@ public:
 
     std::unique_ptr<MonitorHandle> handle;
 };
-}
+} // namespace gameplay
