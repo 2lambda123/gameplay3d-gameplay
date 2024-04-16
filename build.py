@@ -37,7 +37,7 @@ DEPS_FOLDER = "_deps"
 def clear_dir(dir_path):
     """
 
-    :param dir_path: 
+    :param dir_path:
 
     """
     if os.path.exists(dir_path):
@@ -51,9 +51,9 @@ def clear_dir(dir_path):
 def copy_files(src_dir, dst_dir, match_exp):
     """
 
-    :param src_dir: 
-    :param dst_dir: 
-    :param match_exp: 
+    :param src_dir:
+    :param dst_dir:
+    :param match_exp:
 
     """
     clear_dir(dst_dir)
@@ -64,8 +64,8 @@ def copy_files(src_dir, dst_dir, match_exp):
 def remove_files(src_dir, match_exp):
     """
 
-    :param src_dir: 
-    :param match_exp: 
+    :param src_dir:
+    :param match_exp:
 
     """
     for filename in glob.glob(os.path.join(src_dir, match_exp)):
