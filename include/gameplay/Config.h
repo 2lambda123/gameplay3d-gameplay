@@ -28,7 +28,6 @@ class GP_API Config
     friend class App;
 
 public:
-
     /**
      * Constructor.
      *
@@ -205,7 +204,7 @@ public:
      * @param The config interface to use for accessing internal table config.
      * @param userPtr The user pointer specified when for_each_table
      */
-    typedef bool(*OnVisitTableFn)(Config* config, void* userPtr);
+    typedef bool (*OnVisitTableFn)(Config* config, void* userPtr);
 
     /**
      * Iterates of the table of array at the specifed key.
@@ -224,5 +223,4 @@ private:
     Impl* _impl = nullptr;
 };
 
-}
-
+} // namespace gameplay

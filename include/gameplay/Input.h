@@ -225,7 +225,6 @@ enum class CursorStandardShape : uint32_t
 class Input
 {
 public:
-
     /**
      * Sets the position of the coordinates of the cursor.
      *
@@ -412,5 +411,4 @@ private:
     Input();
     ~Input();
 };
-}
-
+} // namespace gameplay

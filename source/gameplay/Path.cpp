@@ -2,7 +2,7 @@
 #include "Logging.h"
 #include "Unicode.h"
 #if GP_PLATFORM_WINDOWS
-#   include <pathcch.h>
+#    include <pathcch.h>
 #endif
 #include <functional>
 #include <utility>
@@ -33,19 +33,16 @@ Path::Path(const char* path)
     _sanitize_path();
 }
 
-Path::Path(std::string path) :
-    _pathStr(std::move(path))
+Path::Path(std::string path) : _pathStr(std::move(path))
 {
     _sanitize_path();
 }
 
-Path::Path(const Path& other) :
-    _pathStr(other._pathStr)
+Path::Path(const Path& other) : _pathStr(other._pathStr)
 {
 }
 
-Path::Path(Path&& other) noexcept :
-    _pathStr(std::move(other._pathStr))
+Path::Path(Path&& other) noexcept : _pathStr(std::move(other._pathStr))
 {
 }
 
@@ -241,9 +238,7 @@ Path Path::concat(const Path& concatedPart) const
     {
         return *this;
     }
-    PathPartDesc parts[] = { { c_str(), len() },
-        { concatedPart.c_str(), concatedPart.len() }
-    };
+    PathPartDesc parts[] = { { c_str(), len() }, { concatedPart.c_str(), concatedPart.len() } };
     return _concat(parts, GP_COUNTOF(parts));
 }
 
@@ -292,9 +287,8 @@ Path& Path::replace_extension(const Path& newExtension)
         }
     }
     PathPartDesc parts[] = { { this->c_str(), remainingPathSize },
-        { DOT_STRING, DOT_STRING_LENGTH },
-        { newExtensionData, newExtensionSize }
-    };
+                             { DOT_STRING, DOT_STRING_LENGTH },
+                             { newExtensionData, newExtensionSize } };
     return *this = _concat(parts, GP_COUNTOF(parts));
 }
 
@@ -328,7 +322,7 @@ bool Path::is_absolute() const
     }
     // extended drive letter path (ie: prefixed with "//./D:").
     if (pathDataLength > 4 && pathDataStart[0] == FORWARD_SLASH_CHAR && pathDataStart[1] == FORWARD_SLASH_CHAR &&
-            pathDataStart[2] == DOT_CHAR && pathDataStart[3] == FORWARD_SLASH_CHAR)
+        pathDataStart[2] == DOT_CHAR && pathDataStart[3] == FORWARD_SLASH_CHAR)
     {
         // at least a drive name was specified.
         if (pathDataLength > 6 && pathDataStart[5] == COLON_CHAR)
@@ -368,10 +362,8 @@ bool Path::is_absolute() const
     // path for a drive, volume, or device is actually passed in here, it will still be treated
     // as though it were an absolute path.  the results of using such a path further may be
     // undefined however.
-    if (pathDataLength > 2 &&
-            pathDataStart[0] == FORWARD_SLASH_CHAR &&
-            pathDataStart[1] == FORWARD_SLASH_CHAR &&
-            pathDataStart[2] != FORWARD_SLASH_CHAR)
+    if (pathDataLength > 2 && pathDataStart[0] == FORWARD_SLASH_CHAR && pathDataStart[1] == FORWARD_SLASH_CHAR &&
+        pathDataStart[2] != FORWARD_SLASH_CHAR)
     {
         return true;
     }
@@ -453,7 +445,8 @@ Path Path::get_normalized() const
                 resultPathTokens.emplace_back(
                     pathDataStart, static_cast<size_t>(possibleSlashPos - pathDataStart), PathTokenType::ROOT_NAME);
             }
-            resultPathTokens.emplace_back(FORWARD_SLASH_STRING, FORWARD_SLASH_STRING_LENGTH, NormalizePartType::ROOT_SLASH);
+            resultPathTokens.emplace_back(
+                FORWARD_SLASH_STRING, FORWARD_SLASH_STRING_LENGTH, NormalizePartType::ROOT_SLASH);
         }
         else
         {
@@ -470,13 +463,13 @@ Path Path::get_normalized() const
     const char* bufferEnd = pathDataStart + pathDataLength;
     PathTokenType curTokenType = PathTokenType::NAME;
     for (const char* curTokenEnd = _get_token_end(prevTokenEnd, bufferEnd, curTokenType); curTokenEnd != nullptr;
-            prevTokenEnd = curTokenEnd, curTokenEnd = _get_token_end(prevTokenEnd, bufferEnd, curTokenType))
+         prevTokenEnd = curTokenEnd, curTokenEnd = _get_token_end(prevTokenEnd, bufferEnd, curTokenType))
     {
         switch (curTokenType)
         {
         case PathTokenType::SLASH:
             if (resultPathTokens.empty() || resultPathTokens.back().type == NormalizePartType::SLASH ||
-                    resultPathTokens.back().type == NormalizePartType::ROOT_SLASH)
+                resultPathTokens.back().type == NormalizePartType::ROOT_SLASH)
             {
                 // skip if we already have a slash at the end
                 alreadyNormalized = false;
@@ -497,7 +490,7 @@ Path Path::get_normalized() const
             // check if the previous element is a part of the root name (even without a slash)
             // and skip dot-dot in such case
             if (resultPathTokens.back().type == NormalizePartType::ROOT_NAME ||
-                    resultPathTokens.back().type == NormalizePartType::ROOT_SLASH)
+                resultPathTokens.back().type == NormalizePartType::ROOT_SLASH)
             {
                 alreadyNormalized = false;
                 continue;
@@ -568,9 +561,8 @@ Path& Path::normalize()
 Path Path::get_relative(const Path& base) const noexcept
 {
     // check if the operation is possible
-    if (get_root_name() != base.get_root_name() ||
-            is_absolute() != base.is_absolute() ||
-            (!has_root_directory() && base.has_root_directory()))
+    if (get_root_name() != base.get_root_name() || is_absolute() != base.is_absolute() ||
+        (!has_root_directory() && base.has_root_directory()))
     {
         return Path();
     }
@@ -602,7 +594,7 @@ Path Path::get_relative(const Path& base) const noexcept
             break;
         }
         if (curPathTokenType != basePathTokenType ||
-                !std::equal(curPathTokenStart, curPathTokenEnd, baseTokenStart, basePathTokenEnd))
+            !std::equal(curPathTokenStart, curPathTokenEnd, baseTokenStart, basePathTokenEnd))
         {
             break;
         }
@@ -683,8 +675,7 @@ Path Path::join(const Path& joinedPart) const
     {
         return *this;
     }
-    const bool haveSeparator =
-        _pathStr.back() == FORWARD_SLASH_CHAR || joinedPart._pathStr.front() == FORWARD_SLASH_CHAR;
+    const bool haveSeparator = _pathStr.back() == FORWARD_SLASH_CHAR || joinedPart._pathStr.front() == FORWARD_SLASH_CHAR;
     PathPartDesc parts[3] = {};
     size_t numParts = 0;
     parts[numParts++] = { c_str(), len() };
@@ -776,11 +767,11 @@ std::wstring Path::fix_windows_path_prefixes(const std::wstring& path)
 const char* Path::_get_token_end(const char* bufferBegin, const char* bufferEnd, PathTokenType& resultType)
 {
     /**
-    * Gets the next path token starting at bufferStart till bufferEnd (points after the end of the
-    * buffer data). On success returns pointer immediately after the token data and returns token type in the
-    * resultType. On failure returns null and the value of the resultType is undetermined.
-    * Note: it doesn't determine if a NAME is a ROOT_NAME. (ROOT_NAME is added to enum for convenience)
-    */
+     * Gets the next path token starting at bufferStart till bufferEnd (points after the end of the
+     * buffer data). On success returns pointer immediately after the token data and returns token type in the
+     * resultType. On failure returns null and the value of the resultType is undetermined.
+     * Note: it doesn't determine if a NAME is a ROOT_NAME. (ROOT_NAME is added to enum for convenience)
+     */
     if (bufferBegin == nullptr || bufferEnd == nullptr || bufferEnd <= bufferBegin)
     {
         return nullptr;
@@ -916,7 +907,7 @@ const char* Path::_get_root_name_end_ptr() const
     // check if it's a UNC name ("//location/...")
     // note: just checking if the first 2 chars are forward slashes and the third symbol is not
     if (pathDataSize >= 3 && pathDataStart[0] == FORWARD_SLASH_CHAR && pathDataStart[1] == FORWARD_SLASH_CHAR &&
-            pathDataStart[2] != FORWARD_SLASH_CHAR)
+        pathDataStart[2] != FORWARD_SLASH_CHAR)
     {
         // search for a root directory
         const char* const slashPtr = _find_from_start(pathDataStart + 3, pathDataSize - 3, FORWARD_SLASH_CHAR);
@@ -935,8 +926,7 @@ const char* Path::_get_relative_part_ptr() const
     }
     const size_t rootEndOffset = rootNameEndPtr - _pathStr.data();
     // find the pointer to the first symbol after the root name that is not a forward slash
-    return _find_from_start<std::not_equal_to<char>>(
-               rootNameEndPtr, _pathStr.size() - rootEndOffset, FORWARD_SLASH_CHAR);
+    return _find_from_start<std::not_equal_to<char>>(rootNameEndPtr, _pathStr.size() - rootEndOffset, FORWARD_SLASH_CHAR);
 }
 
 const char* Path::_get_root_directory_end_ptr() const
@@ -970,4 +960,4 @@ void Path::_sanitize_path()
     // no change needed
 #endif
 }
-}
+} // namespace gameplay

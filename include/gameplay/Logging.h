@@ -34,8 +34,8 @@ namespace gameplay
 class GP_API Logging
 {
     friend class App;
-public:
 
+public:
     enum class Level : uint32_t
     {
         LEVEL_TRACE,
@@ -82,5 +82,4 @@ private:
     void startup();
     void shutdown();
 };
-}
-
+} // namespace gameplay

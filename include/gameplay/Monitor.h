@@ -23,8 +23,8 @@ class GP_API Monitor
 {
     friend class App;
     friend class Window;
-public:
 
+public:
     struct VideoMode
     {
         int32_t width;
@@ -124,4 +124,4 @@ public:
 
     std::unique_ptr<MonitorHandle> handle;
 };
-}
+} // namespace gameplay

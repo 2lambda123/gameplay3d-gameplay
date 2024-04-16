@@ -18,6 +18,7 @@ struct WindowHandle;
 class GP_API Window
 {
     friend class App;
+
 public:
     /**
      * Constructor.
@@ -488,4 +489,4 @@ public:
 
     std::unique_ptr<WindowHandle> handle;
 };
-}
+} // namespace gameplay

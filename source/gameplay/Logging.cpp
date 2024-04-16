@@ -50,11 +50,12 @@ void Logging::startup()
             set_level(level);
             spdlog::set_pattern("[%Y-%m-%d][%H:%M:%S.%e] [%^%l%$] %v");
             spdlog::flush_on(spdlog::level::info);
-            //spdlog::flush_every(std::chrono::seconds(1));
+            // spdlog::flush_every(std::chrono::seconds(1));
             GP_LOG_INFO("=================================================================================");
             GP_LOG_INFO("LOG LEVEL: {}", logLevelStr.c_str());
             GP_LOG_INFO("LOG FILE: {}", logPath.c_str());
-            GP_LOG_INFO("==================================================================================", logPath.c_str());
+            GP_LOG_INFO(
+                "==================================================================================", logPath.c_str());
         }
         catch (const spdlog::spdlog_ex& ex)
         {
@@ -93,7 +94,7 @@ Logging::Level Logging::parse_level(const char* str)
 
 void Logging::set_level(Logging::Level level)
 {
-    switch(level)
+    switch (level)
     {
     case Logging::Level::LEVEL_TRACE:
         spdlog::set_level(spdlog::level::trace);
@@ -122,7 +123,7 @@ void Logging::set_level(Logging::Level level)
 Logging::Level Logging::get_level() const
 {
     auto level = spdlog::get_level();
-    switch(level)
+    switch (level)
     {
     case spdlog::level::trace:
         return Logging::Level::LEVEL_TRACE;
@@ -143,4 +144,4 @@ Logging::Level Logging::get_level() const
     }
 }
 
-}
+} // namespace gameplay

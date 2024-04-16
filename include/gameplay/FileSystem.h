@@ -68,8 +68,8 @@ class GP_API FileSystem
 {
     friend class App;
     friend class Config;
-public:
 
+public:
     /**
      * Changes events for files and directories on the file system.
      */
@@ -138,11 +138,11 @@ public:
     bool is_directory(const char* path);
 
     /**
-    * Checks is a file is a writable.
-    *
-    * @param path The path to check.
-    * @return true if the file is writable, false if not.
-    */
+     * Checks is a file is a writable.
+     *
+     * @param path The path to check.
+     * @return true if the file is writable, false if not.
+     */
     bool is_writable(const char* path);
 
     /**
@@ -331,7 +331,8 @@ public:
      *
      * @param file The handle of the file to read.
      * @param line The null-terminated string to write.
-     * @returns true if the full line is successfully written to the file, false if the full string could not be written to the file.
+     * @returns true if the full line is successfully written to the file, false if the full string could not be written
+     * to the file.
      */
     bool write_file_line(File* file, const char* line);
 
@@ -510,4 +511,4 @@ private:
     struct Impl;
     std::unique_ptr<Impl> _impl;
 };
-}
+} // namespace gameplay

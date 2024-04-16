@@ -31,11 +31,10 @@ template <typename... Args>
 class GP_API Signal
 {
 public:
-
     /**
      * Constructor
      */
-    Signal() {};
+    Signal(){};
 
     /**
      * Constructor.
@@ -47,16 +46,14 @@ public:
     /**
      * Constructor.
      */
-    Signal(Signal&& other) noexcept :
-        _slots(std::move(other._slots)),
-        _current_id(other._current_id)
+    Signal(Signal&& other) noexcept : _slots(std::move(other._slots)), _current_id(other._current_id)
     {
     }
 
     /**
      * Destructor.
      */
-    ~Signal() {};
+    ~Signal(){};
 
     Signal& operator=(Signal const& other)
     {
@@ -93,23 +90,18 @@ public:
      * Connects a member function of an object instance to this Signal.
      */
     template <typename T>
-    uint32_t connect_member(T* inst, void (T::* func)(Args...))
+    uint32_t connect_member(T* inst, void (T::*func)(Args...))
     {
-        return connect([=](Args... args)
-        {
-            (inst->*func)(args...);
-        });
+        return connect([=](Args... args) { (inst->*func)(args...); });
     }
 
     /**
      * Connect a const member function of an object to this Signal.
      */
     template <typename T>
-    uint32_t connect_member(T* inst, void (T::* func)(Args...) const)
+    uint32_t connect_member(T* inst, void (T::*func)(Args...) const)
     {
-        return connect([=](Args... args) {
-            (inst->*func)(args...);
-        });
+        return connect([=](Args... args) { (inst->*func)(args...); });
     }
 
     /**
@@ -173,4 +165,4 @@ private:
     mutable std::map<uint32_t, std::function<void(Args...)>> _slots;
     mutable uint32_t _current_id{ 0 };
 };
-}
+} // namespace gameplay

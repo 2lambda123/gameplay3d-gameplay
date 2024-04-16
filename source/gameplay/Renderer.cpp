@@ -17,56 +17,56 @@ namespace gameplay
 
 struct RenderFrame
 {
-    VkCommandPool commandPool{VK_NULL_HANDLE};
-    VkCommandBuffer commandBuffer{VK_NULL_HANDLE};
-    VkFence fence{VK_NULL_HANDLE};
-    VkImage backbuffer{VK_NULL_HANDLE};
-    VkImageView backbufferView{VK_NULL_HANDLE};
-    VkFramebuffer framebuffer{VK_NULL_HANDLE};
-    VkSemaphore imageAcquiredSemaphore{VK_NULL_HANDLE};
-    VkSemaphore renderCompleteSemaphore{VK_NULL_HANDLE};
+    VkCommandPool commandPool{ VK_NULL_HANDLE };
+    VkCommandBuffer commandBuffer{ VK_NULL_HANDLE };
+    VkFence fence{ VK_NULL_HANDLE };
+    VkImage backbuffer{ VK_NULL_HANDLE };
+    VkImageView backbufferView{ VK_NULL_HANDLE };
+    VkFramebuffer framebuffer{ VK_NULL_HANDLE };
+    VkSemaphore imageAcquiredSemaphore{ VK_NULL_HANDLE };
+    VkSemaphore renderCompleteSemaphore{ VK_NULL_HANDLE };
 };
 
 struct Renderer::Impl
 {
-    bool validation{GP_RENDERER_VALIDATION};
-    uint32_t minImageCount{GP_RENDERER_MIN_IMAGE_COUNT};
-    GLFWwindow* glfwWindow{nullptr};
-    VkAllocationCallbacks* allocator{nullptr};
-    VkDebugReportCallbackEXT debugReport{nullptr};
-    VkInstance instance{VK_NULL_HANDLE};
-    VkPhysicalDevice physicalDevice{VK_NULL_HANDLE};
+    bool validation{ GP_RENDERER_VALIDATION };
+    uint32_t minImageCount{ GP_RENDERER_MIN_IMAGE_COUNT };
+    GLFWwindow* glfwWindow{ nullptr };
+    VkAllocationCallbacks* allocator{ nullptr };
+    VkDebugReportCallbackEXT debugReport{ nullptr };
+    VkInstance instance{ VK_NULL_HANDLE };
+    VkPhysicalDevice physicalDevice{ VK_NULL_HANDLE };
     VkPhysicalDeviceProperties physicalDeviceProperties = {};
     VkPhysicalDeviceMemoryProperties physicalDeviceMemoryProperties = {};
-    VkDevice device{VK_NULL_HANDLE};
+    VkDevice device{ VK_NULL_HANDLE };
     std::vector<VkQueueFamilyProperties> queueFamilyProperties;
     struct
     {
-        uint32_t present{0};
-        uint32_t graphics{0};
-        uint32_t compute{0};
-        uint32_t transfer{0};
+        uint32_t present{ 0 };
+        uint32_t graphics{ 0 };
+        uint32_t compute{ 0 };
+        uint32_t transfer{ 0 };
     } queueFamilyIndices;
-    VkQueue queue{VK_NULL_HANDLE};
-    int surfaceWidth{0};
-    int surfaceHeight{0};
-    VkSurfaceKHR surface{VK_NULL_HANDLE};
+    VkQueue queue{ VK_NULL_HANDLE };
+    int surfaceWidth{ 0 };
+    int surfaceHeight{ 0 };
+    VkSurfaceKHR surface{ VK_NULL_HANDLE };
     VkSurfaceFormatKHR surfaceFormat;
     VkColorSpaceKHR colorSpace;
-    VkSwapchainKHR swapchain{VK_NULL_HANDLE};
+    VkSwapchainKHR swapchain{ VK_NULL_HANDLE };
     VkPresentModeKHR presentMode;
-    VkRenderPass renderPass{VK_NULL_HANDLE};
-    VkPipeline pipeline{VK_NULL_HANDLE};
-    bool clearEnable{true};
+    VkRenderPass renderPass{ VK_NULL_HANDLE };
+    VkPipeline pipeline{ VK_NULL_HANDLE };
+    bool clearEnable{ true };
     VkClearValue clearValue = {};
-    uint32_t frameIndex{0};
-    uint32_t semaphoreIndex{0};
+    uint32_t frameIndex{ 0 };
+    uint32_t semaphoreIndex{ 0 };
     VkFormat imageFormat;
-    uint32_t imageCount{0};
+    uint32_t imageCount{ 0 };
     std::vector<RenderFrame> frames;
-    VkPipelineCache pipelineCache{VK_NULL_HANDLE};
-    VkDescriptorPool descriptorPool{VK_NULL_HANDLE};
-    bool rebuildSwapchain{false};
+    VkPipelineCache pipelineCache{ VK_NULL_HANDLE };
+    VkDescriptorPool descriptorPool{ VK_NULL_HANDLE };
+    bool rebuildSwapchain{ false };
 
     void startup_vulkan();
     void shutdown_vulkan();
@@ -76,8 +76,15 @@ struct Renderer::Impl
     void destroy_render_frame(RenderFrame* renderFrame);
     uint32_t get_queue_family_index(VkQueueFlagBits queueFlags);
     VkBool32 is_device_extension_present(VkPhysicalDevice physicalDevice, const char* extensionName);
-    VkSurfaceFormatKHR select_surface_format(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VkFormat* requestFormats, int requestFormatCount, VkColorSpaceKHR requestColorSpace);
-    VkPresentModeKHR select_present_mode(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface,  const VkPresentModeKHR* requestModes, int requestModeCount);
+    VkSurfaceFormatKHR select_surface_format(VkPhysicalDevice physicalDevice,
+                                             VkSurfaceKHR surface,
+                                             const VkFormat* requestFormats,
+                                             int requestFormatCount,
+                                             VkColorSpaceKHR requestColorSpace);
+    VkPresentModeKHR select_present_mode(VkPhysicalDevice physicalDevice,
+                                         VkSurfaceKHR surface,
+                                         const VkPresentModeKHR* requestModes,
+                                         int requestModeCount);
     uint32_t get_image_count_for_present_mode(VkPresentModeKHR present_mode);
     void next_frame();
     void present_frame();
@@ -117,7 +124,7 @@ void Renderer::Impl::startup_vulkan()
     // get the required surface extensions from glfw
     uint32_t glfwExtensionCount = 0;
     const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-    for ( uint32_t i = 0; i < glfwExtensionCount; i++)
+    for (uint32_t i = 0; i < glfwExtensionCount; i++)
     {
         instanceExtension.push_back(glfwExtensions[i]);
     }
@@ -155,12 +162,16 @@ void Renderer::Impl::startup_vulkan()
     // register validation debug report
     if (validation)
     {
-        vkCreateDebugReportCallbackEXT = reinterpret_cast<PFN_vkCreateDebugReportCallbackEXT>(vkGetInstanceProcAddr(instance, "vkCreateDebugReportCallbackEXT"));
-        vkDestroyDebugReportCallbackEXT = reinterpret_cast<PFN_vkDestroyDebugReportCallbackEXT>(vkGetInstanceProcAddr(instance, "vkDestroyDebugReportCallbackEXT"));
-        vkDebugReportMessageEXT = reinterpret_cast<PFN_vkDebugReportMessageEXT>(vkGetInstanceProcAddr(instance, "vkDebugReportMessageEXT"));
+        vkCreateDebugReportCallbackEXT = reinterpret_cast<PFN_vkCreateDebugReportCallbackEXT>(
+            vkGetInstanceProcAddr(instance, "vkCreateDebugReportCallbackEXT"));
+        vkDestroyDebugReportCallbackEXT = reinterpret_cast<PFN_vkDestroyDebugReportCallbackEXT>(
+            vkGetInstanceProcAddr(instance, "vkDestroyDebugReportCallbackEXT"));
+        vkDebugReportMessageEXT =
+            reinterpret_cast<PFN_vkDebugReportMessageEXT>(vkGetInstanceProcAddr(instance, "vkDebugReportMessageEXT"));
         VkDebugReportCallbackCreateInfoEXT dbgCreateInfo = {};
         dbgCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
-        dbgCreateInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
+        dbgCreateInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT |
+                              VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
         dbgCreateInfo.pfnCallback = (PFN_vkDebugReportCallbackEXT)log_vulkan_validation_debug_report;
         dbgCreateInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT;
         VK_CHECK_RESULT(vkCreateDebugReportCallbackEXT(instance, &dbgCreateInfo, allocator, &debugReport));
@@ -236,7 +247,8 @@ void Renderer::Impl::startup_vulkan()
         queueFamilyIndices.compute = queueFamilyIndices.graphics;
     }
 
-    if ((queueFamilyIndices.transfer != queueFamilyIndices.graphics) && (queueFamilyIndices.transfer != queueFamilyIndices.compute))
+    if ((queueFamilyIndices.transfer != queueFamilyIndices.graphics) &&
+        (queueFamilyIndices.transfer != queueFamilyIndices.compute))
     {
         // if compute family index differs, we need an additional queue create info for the compute queue
         VkDeviceQueueCreateInfo queueInfo{};
@@ -291,20 +303,17 @@ void Renderer::Impl::startup_vulkan()
     vkGetDeviceQueue(device, queueFamilyIndices.graphics, 0, &queue);
 
     // setup and descriptor pool
-    VkDescriptorPoolSize poolSizes[] =
-    {
-        { VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
-        { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000 },
-        { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000 },
-        { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1000 },
-        { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1000 },
-        { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1000 },
-        { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000 },
-        { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1000 },
-        { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1000 },
-        { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000 },
-        { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 }
-    };
+    VkDescriptorPoolSize poolSizes[] = { { VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
+                                         { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000 },
+                                         { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000 },
+                                         { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1000 },
+                                         { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1000 },
+                                         { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1000 },
+                                         { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000 },
+                                         { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1000 },
+                                         { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1000 },
+                                         { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000 },
+                                         { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 } };
     VkDescriptorPoolCreateInfo poolInfo = {};
     poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
     poolInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
@@ -336,14 +345,22 @@ void Renderer::Impl::startup_window_surface()
     glfwGetFramebufferSize(glfwWindow, &surfaceWidth, &surfaceHeight);
 
     // lookup device surface and swapchain extensions
-    vkGetPhysicalDeviceSurfaceSupportKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfaceSupportKHR>(vkGetInstanceProcAddr(instance, "vkGetPhysicalDeviceSurfaceSupportKHR"));
-    vkGetPhysicalDeviceSurfaceCapabilitiesKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR>(vkGetInstanceProcAddr(instance, "vkGetPhysicalDeviceSurfaceCapabilitiesKHR"));
-    vkGetPhysicalDeviceSurfaceFormatsKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfaceFormatsKHR>(vkGetInstanceProcAddr(instance, "vkGetPhysicalDeviceSurfaceFormatsKHR"));
-    vkGetPhysicalDeviceSurfacePresentModesKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfacePresentModesKHR>(vkGetInstanceProcAddr(instance, "vkGetPhysicalDeviceSurfacePresentModesKHR"));
-    vkCreateSwapchainKHR = reinterpret_cast<PFN_vkCreateSwapchainKHR>(vkGetInstanceProcAddr(instance, "vkCreateSwapchainKHR"));
-    vkDestroySwapchainKHR = reinterpret_cast<PFN_vkDestroySwapchainKHR>(vkGetInstanceProcAddr(instance, "vkDestroySwapchainKHR"));
-    vkGetSwapchainImagesKHR = reinterpret_cast<PFN_vkGetSwapchainImagesKHR>(vkGetInstanceProcAddr(instance, "vkGetSwapchainImagesKHR"));
-    vkAcquireNextImageKHR = reinterpret_cast<PFN_vkAcquireNextImageKHR>(vkGetInstanceProcAddr(instance, "vkAcquireNextImageKHR"));
+    vkGetPhysicalDeviceSurfaceSupportKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfaceSupportKHR>(
+        vkGetInstanceProcAddr(instance, "vkGetPhysicalDeviceSurfaceSupportKHR"));
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR>(
+        vkGetInstanceProcAddr(instance, "vkGetPhysicalDeviceSurfaceCapabilitiesKHR"));
+    vkGetPhysicalDeviceSurfaceFormatsKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfaceFormatsKHR>(
+        vkGetInstanceProcAddr(instance, "vkGetPhysicalDeviceSurfaceFormatsKHR"));
+    vkGetPhysicalDeviceSurfacePresentModesKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfacePresentModesKHR>(
+        vkGetInstanceProcAddr(instance, "vkGetPhysicalDeviceSurfacePresentModesKHR"));
+    vkCreateSwapchainKHR =
+        reinterpret_cast<PFN_vkCreateSwapchainKHR>(vkGetInstanceProcAddr(instance, "vkCreateSwapchainKHR"));
+    vkDestroySwapchainKHR =
+        reinterpret_cast<PFN_vkDestroySwapchainKHR>(vkGetInstanceProcAddr(instance, "vkDestroySwapchainKHR"));
+    vkGetSwapchainImagesKHR =
+        reinterpret_cast<PFN_vkGetSwapchainImagesKHR>(vkGetInstanceProcAddr(instance, "vkGetSwapchainImagesKHR"));
+    vkAcquireNextImageKHR =
+        reinterpret_cast<PFN_vkAcquireNextImageKHR>(vkGetInstanceProcAddr(instance, "vkAcquireNextImageKHR"));
     vkQueuePresentKHR = reinterpret_cast<PFN_vkQueuePresentKHR>(vkGetInstanceProcAddr(instance, "vkQueuePresentKHR"));
 
     VkBool32 res;
@@ -354,12 +371,15 @@ void Renderer::Impl::startup_window_surface()
         return;
     }
     // select surface format
-    const VkFormat requestSurfaceImageFormat[] = { VK_FORMAT_B8G8R8A8_UNORM, VK_FORMAT_R8G8B8A8_UNORM, VK_FORMAT_B8G8R8_UNORM, VK_FORMAT_R8G8B8_UNORM };
+    const VkFormat requestSurfaceImageFormat[] = { VK_FORMAT_B8G8R8A8_UNORM, VK_FORMAT_R8G8B8A8_UNORM,
+                                                   VK_FORMAT_B8G8R8_UNORM, VK_FORMAT_R8G8B8_UNORM };
     const VkColorSpaceKHR requestSurfaceColorSpace = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
-    surfaceFormat = select_surface_format(physicalDevice, surface, requestSurfaceImageFormat, (uint32_t)GP_COUNTOF(requestSurfaceImageFormat), requestSurfaceColorSpace);
+    surfaceFormat = select_surface_format(physicalDevice, surface, requestSurfaceImageFormat,
+                                          (uint32_t)GP_COUNTOF(requestSurfaceImageFormat), requestSurfaceColorSpace);
 
     // get the present mode and image count for the present mode
-    VkPresentModeKHR presentModes[] = { VK_PRESENT_MODE_MAILBOX_KHR, VK_PRESENT_MODE_IMMEDIATE_KHR, VK_PRESENT_MODE_FIFO_KHR };
+    VkPresentModeKHR presentModes[] = { VK_PRESENT_MODE_MAILBOX_KHR, VK_PRESENT_MODE_IMMEDIATE_KHR,
+                                        VK_PRESENT_MODE_FIFO_KHR };
     presentMode = select_present_mode(physicalDevice, surface, &presentModes[0], (uint32_t)GP_COUNTOF(presentModes));
 
     // create the swapchain with render frames
@@ -377,7 +397,7 @@ void Renderer::Impl::shutdown_window_surface()
     frames.clear();
     vkDestroyPipeline(device, pipeline, allocator);
     vkDestroyRenderPass(device, renderPass, allocator);
-    vkDestroySwapchainKHR(device,swapchain, allocator);
+    vkDestroySwapchainKHR(device, swapchain, allocator);
     vkDestroySurfaceKHR(instance, surface, allocator);
 }
 
@@ -387,7 +407,8 @@ uint32_t Renderer::Impl::get_queue_family_index(VkQueueFlagBits queueFlags)
     {
         for (uint32_t i = 0; i < static_cast<uint32_t>(queueFamilyProperties.size()); i++)
         {
-            if ((queueFamilyProperties[i].queueFlags & queueFlags) && ((queueFamilyProperties[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) == 0))
+            if ((queueFamilyProperties[i].queueFlags & queueFlags) &&
+                ((queueFamilyProperties[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) == 0))
             {
                 return i;
                 break;
@@ -422,7 +443,11 @@ VkBool32 Renderer::Impl::is_device_extension_present(VkPhysicalDevice physicalDe
     return false;
 }
 
-VkSurfaceFormatKHR Renderer::Impl::select_surface_format(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VkFormat* requestFormats, int requestFormatCount, VkColorSpaceKHR requestColorSpace)
+VkSurfaceFormatKHR Renderer::Impl::select_surface_format(VkPhysicalDevice physicalDevice,
+                                                         VkSurfaceKHR surface,
+                                                         const VkFormat* requestFormats,
+                                                         int requestFormatCount,
+                                                         VkColorSpaceKHR requestColorSpace)
 {
     uint32_t availSurfaceFormatCount;
     vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &availSurfaceFormatCount, NULL);
@@ -460,7 +485,10 @@ VkSurfaceFormatKHR Renderer::Impl::select_surface_format(VkPhysicalDevice physic
     }
 }
 
-VkPresentModeKHR Renderer::Impl::select_present_mode(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VkPresentModeKHR* requestModes, int requestModeCount)
+VkPresentModeKHR Renderer::Impl::select_present_mode(VkPhysicalDevice physicalDevice,
+                                                     VkSurfaceKHR surface,
+                                                     const VkPresentModeKHR* requestModes,
+                                                     int requestModeCount)
 {
     // request a certain mode and confirm that it is available. If not use VK_PRESENT_MODE_FIFO_KHR which is mandatory
     uint32_t availModeCount = 0;
@@ -484,7 +512,7 @@ VkPresentModeKHR Renderer::Impl::select_present_mode(VkPhysicalDevice physicalDe
 
 uint32_t Renderer::Impl::get_image_count_for_present_mode(VkPresentModeKHR mode)
 {
-    switch(mode)
+    switch (mode)
     {
     case VK_PRESENT_MODE_MAILBOX_KHR:
         return 3;
@@ -506,7 +534,7 @@ void Renderer::Impl::create_or_resize_window_swapchain()
     VK_CHECK_RESULT(vkDeviceWaitIdle(device));
 
     // cleanup previous swapchain resources
-    for (size_t i = 0; i <imageCount; i++)
+    for (size_t i = 0; i < imageCount; i++)
     {
         destroy_render_frame(&frames[i]);
     }
@@ -533,7 +561,7 @@ void Renderer::Impl::create_or_resize_window_swapchain()
     info.imageColorSpace = surfaceFormat.colorSpace;
     info.imageArrayLayers = 1;
     info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-    info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;           // Assume that graphics family == present family
+    info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE; // Assume that graphics family == present family
     info.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
     info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
     info.presentMode = presentMode;
@@ -804,7 +832,8 @@ void Renderer::Impl::render_imgui()
 {
     VkSemaphore imageAcquiredSemaphore = frames[semaphoreIndex].imageAcquiredSemaphore;
     VkSemaphore renderCompleteSemaphore = frames[semaphoreIndex].renderCompleteSemaphore;
-    VkResult res = vkAcquireNextImageKHR(device, swapchain, UINT64_MAX, imageAcquiredSemaphore, VK_NULL_HANDLE, &frameIndex);
+    VkResult res =
+        vkAcquireNextImageKHR(device, swapchain, UINT64_MAX, imageAcquiredSemaphore, VK_NULL_HANDLE, &frameIndex);
     if (res == VK_ERROR_OUT_OF_DATE_KHR)
     {
         rebuildSwapchain = true;
@@ -896,4 +925,4 @@ void Renderer::present_frame()
 {
     _impl->present_frame();
 }
-}
+} // namespace gameplay

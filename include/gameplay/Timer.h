@@ -11,7 +11,6 @@ namespace gameplay
 class GP_API Timer
 {
 public:
-
     enum class Resolution : uint32_t
     {
         SECONDS,
@@ -23,12 +22,16 @@ public:
     /**
      * Constructor.
      */
-    Timer() {}
+    Timer()
+    {
+    }
 
     /**
      * Destructor.
      */
-    ~Timer() {}
+    ~Timer()
+    {
+    }
 
     /**
      * Gets the precision of the timer (minimal tick duration).
@@ -60,7 +63,7 @@ public:
     inline T get_elapsed_time(Resolution resolution = Resolution::MILLISECONDS);
 
 private:
-    bool _running{false};
+    bool _running{ false };
     std::chrono::high_resolution_clock::time_point _start;
     std::chrono::high_resolution_clock::time_point _stop;
 };
@@ -76,7 +79,7 @@ double Timer::get_precision()
 
 void Timer::start()
 {
-    _start= std::chrono::high_resolution_clock::now();
+    _start = std::chrono::high_resolution_clock::now();
     _running = true;
 }
 
@@ -118,4 +121,4 @@ T Timer::get_elapsed_time(Resolution resolution)
         return std::chrono::duration_cast<dblMilliseconds>(elapsedTime).count();
     }
 }
-}
+} // namespace gameplay

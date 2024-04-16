@@ -95,4 +95,4 @@ struct Pixmap
     int32_t height;
     uint8_t* pixels;
 };
-}
+} // namespace gameplay

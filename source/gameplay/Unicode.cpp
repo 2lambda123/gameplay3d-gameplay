@@ -1,9 +1,9 @@
 #include "Unicode.h"
 #if GP_PLATFORM_WINDOWS
-#   include <codecvt>
-#   include <locale>
+#    include <codecvt>
+#    include <locale>
 #else
-#   include <iconv.h>
+#    include <iconv.h>
 #endif
 
 namespace gameplay
@@ -41,7 +41,7 @@ static inline auto& _get_wide_converter()
 {
     GP_IGNOREWARNING_MSC_WITH_PUSH(4996)
     static std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter(
-                Unicode::WIDE_TO_UTF8_FAILURE, Unicode::UTF8_TO_WIDE_FAILURE);
+        Unicode::WIDE_TO_UTF8_FAILURE, Unicode::UTF8_TO_WIDE_FAILURE);
     GP_IGNOREWARNING_MSC_POP
     return converter;
 }
@@ -138,4 +138,4 @@ std::string Unicode::convert_utf32_to_utf8(uint32_t codepoint)
     return u8str;
 }
 
-}
+} // namespace gameplay

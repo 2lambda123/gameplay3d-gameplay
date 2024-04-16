@@ -134,7 +134,11 @@ void Config::load(int argc, char** argv)
         _impl->configPath = Path(appExecutablePath).get_parent().join(Path(GP_CONFIG_FILE_DEFAULT)).get_absolute();
         if (!fs->exists(_impl->configPath.c_str()))
         {
-            _impl->configPath = Path(appExecutablePath).get_parent().join(Path(GP_CONFIG_TARGET_DIR)).join(Path(GP_CONFIG_FILE_DEFAULT)).get_absolute();
+            _impl->configPath = Path(appExecutablePath)
+                                    .get_parent()
+                                    .join(Path(GP_CONFIG_TARGET_DIR))
+                                    .join(Path(GP_CONFIG_FILE_DEFAULT))
+                                    .get_absolute();
             if (!fs->exists(_impl->configPath.c_str()))
             {
                 configFound = false;
@@ -149,7 +153,7 @@ void Config::load(int argc, char** argv)
 
             _impl->root = cpptoml::parse_file(_impl->configPath);
         }
-        catch(const cpptoml::parse_exception& e)
+        catch (const cpptoml::parse_exception& e)
         {
             GP_LOG_ERROR("Failed to parse app .config file: {}, error: {}", _impl->configPath.c_str(), e.what());
         }
@@ -191,14 +195,15 @@ void Config::load(int argc, char** argv)
     return true;
 }*/
 
-static std::pair<std::string, std::shared_ptr<cpptoml::table>> __get_key_and_table(std::shared_ptr<cpptoml::table> root, const char* key)
+static std::pair<std::string, std::shared_ptr<cpptoml::table>> __get_key_and_table(std::shared_ptr<cpptoml::table> root,
+                                                                                   const char* key)
 {
     std::pair<std::string, std::shared_ptr<cpptoml::table>> ret;
     std::string keyStr = key;
     std::string::size_type pos = keyStr.find_last_of('.');
     if (pos != std::string::npos)
     {
-        ret.first = keyStr.substr(pos+1);
+        ret.first = keyStr.substr(pos + 1);
         ret.second = root->get_table(keyStr.substr(0, pos));
     }
     else
@@ -260,7 +265,7 @@ size_t Config::get_array_size(const char* key)
 
 std::string Config::get_string(const char* key, const char* altValue)
 {
-    if(strchr(key, '.'))
+    if (strchr(key, '.'))
     {
         return _impl->root->get_qualified_as<std::string>(key).value_or(altValue);
     }
@@ -287,7 +292,7 @@ std::string Config::set_string(const char* key, const char* value)
 
 bool Config::get_bool(const char* key, bool altValue)
 {
-    if(strchr(key, '.'))
+    if (strchr(key, '.'))
     {
         return (int)_impl->root->get_qualified_as<bool>(key).value_or(altValue);
     }
@@ -314,7 +319,7 @@ bool Config::set_bool(const char* key, bool value)
 
 int Config::get_int(const char* key, int altValue)
 {
-    if(strchr(key, '.'))
+    if (strchr(key, '.'))
     {
         return (int)_impl->root->get_qualified_as<int64_t>(key).value_or(altValue);
     }
@@ -341,7 +346,7 @@ int Config::set_int(const char* key, int value)
 
 float Config::get_float(const char* key, float altValue)
 {
-    if(strchr(key, '.'))
+    if (strchr(key, '.'))
     {
         return (float)_impl->root->get_qualified_as<double>(key).value_or((double)altValue);
     }
@@ -388,7 +393,6 @@ void Config::set_string_array(const char* key, const std::string* arr, size_t ar
     }
     auto kt = __get_key_and_table(_impl->root, key);
     kt.second->insert(kt.first, new_array);
-
 }
 
 void Config::get_bool_array(const char* key, bool* arr, size_t arrSize)
@@ -461,7 +465,7 @@ void Config::set_float_array(const char* key, const float* arr, size_t arrSize)
     kt.second->insert(kt.first, new_array);
 }
 
-void Config::for_each_table(const char* key,  Config::OnVisitTableFn fn, void* userPtr)
+void Config::for_each_table(const char* key, Config::OnVisitTableFn fn, void* userPtr)
 {
     std::shared_ptr<cpptoml::table> root = _impl->root;
 
@@ -475,4 +479,4 @@ void Config::for_each_table(const char* key,  Config::OnVisitTableFn fn, void* u
     _impl->root = root;
 }
 
-}
+} // namespace gameplay

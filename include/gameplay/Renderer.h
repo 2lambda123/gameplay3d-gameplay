@@ -7,6 +7,7 @@ namespace gameplay
 class GP_API Renderer
 {
     friend class App;
+
 public:
     /**
      * Constructor.
@@ -30,4 +31,4 @@ private:
     struct Impl;
     std::unique_ptr<Impl> _impl;
 };
-}
+} // namespace gameplay

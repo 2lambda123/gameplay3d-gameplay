@@ -27,7 +27,6 @@ class Window;
 class GP_API App
 {
 public:
-
     /**
      * Destructor.
      */
@@ -224,11 +223,11 @@ public:
     Signal<App*> on_startup;
 
     /**
-    * Signals the application has started to shutdown.
-    *
-    * emits:
-    * <App*> The running application.
-    */
+     * Signals the application has started to shutdown.
+     *
+     * emits:
+     * <App*> The running application.
+     */
     Signal<App*> on_shutdown;
 
 private:
@@ -236,4 +235,4 @@ private:
     struct Impl;
     std::unique_ptr<Impl> _impl;
 };
-}
+} // namespace gameplay

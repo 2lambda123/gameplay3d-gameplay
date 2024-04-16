@@ -67,4 +67,4 @@ void* Monitor::get_user_ptr() const
 {
     return handle->userPtr;
 }
-}
+} // namespace gameplay
