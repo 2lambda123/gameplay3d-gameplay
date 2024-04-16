@@ -1,11 +1,11 @@
 ##############################################################################
 # build.py script
 ##############################################################################
-import os
 import argparse
 import glob
-import subprocess
+import os
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
